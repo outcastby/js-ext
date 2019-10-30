@@ -2,7 +2,7 @@
   "name": "js-ext",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "main": "build/index.js",
   "scripts": {
     "test": "jest",
     "build": "tsc"
