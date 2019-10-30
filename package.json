@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "build/index.js",
-  "types": "dist/index.d.ts",
+  "types": "build/index.d.ts",
   "scripts": {
     "test": "jest",
     "build": "tsc"
@@ -41,9 +41,5 @@
   },
   "lint-staged": {
     "*.{ts,js,tsx,jsx}": ["eslint --fix", "jest --coverage --findRelatedTests", "git add"]
-  },
-  "files": ["build/**/*"],
-  "exports": {
-    "./sayHello": "./build/sayHello.js"
   }
 }
