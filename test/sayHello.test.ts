@@ -1,6 +1,6 @@
-import sayHello from '../src/sayHello'
+import sayHello from 'foltd/sayHello'
 
 test('sayHello can greet a user', (): void => {
-    const user = { name: 'TypeScript' }
-    expect(sayHello(user)).toBe('Hello TypeScript!')
+  const user = { name: 'TypeScript' }
+  expect(sayHello(user)).toBe('Hello TypeScript!')
 })

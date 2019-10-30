@@ -1,6 +1,4 @@
-interface User {
-  name: string
-}
+import User from 'foltd/user'
 
 const sayHello = (user: User): string => `Hello ${user.name}!`
 

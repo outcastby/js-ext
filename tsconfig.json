@@ -5,7 +5,15 @@
     "outDir": "build",
     "rootDir": "src",
     "strict": true,
-    "esModuleInterop": true
+    "project": "./tsconfig.json",
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "*": [
+        "*",
+        "src/*"
+      ]
+    }
   },
   "exclude": [
     "node_modules",
