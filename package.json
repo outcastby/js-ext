@@ -2,11 +2,13 @@
   "name": "js-ext",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "main": "build/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
-    "tsc": "tsc"
+    "build": "tsc"
   },
+  "prepublish": "build",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/outcastby/js-ext.git"
@@ -39,5 +41,9 @@
   },
   "lint-staged": {
     "*.{ts,js,tsx,jsx}": ["eslint --fix", "jest --coverage --findRelatedTests", "git add"]
+  },
+  "files": ["build/**/*"],
+  "exports": {
+    "./sayHello": "./build/sayHello.js"
   }
 }
