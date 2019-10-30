@@ -2,7 +2,7 @@ import sayHello from './sayHello'
 
 export { sayHello }
 
-export const vas = () => 'VASILIS'
+export const vas = (): string => 'VASILIS'
 
 export default {
   sayHello,
