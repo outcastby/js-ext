@@ -29,6 +29,7 @@
     "jest": "^24.9.0",
     "lint-staged": "^9.4.2",
     "prettier": "^1.18.2",
+    "prettier-eslint-cli": "^5.0.0",
     "ts-jest": "^24.1.0",
     "typescript": "^3.6.4"
   },
@@ -38,6 +39,13 @@
     }
   },
   "lint-staged": {
-    "*.{ts,js,tsx,jsx}": ["eslint --fix", "jest --coverage --findRelatedTests", "git add"]
+    "*.{ts,js,tsx,jsx}": [
+      "eslint --fix",
+      "jest --coverage --findRelatedTests",
+      "git add"
+    ]
+  },
+  "dependencies": {
+    "@types/lodash": "^4.14.144"
   }
 }
