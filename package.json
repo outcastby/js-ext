@@ -1,23 +1,25 @@
 {
-  "name": "js-ext",
-  "version": "1.0.0",
+  "name": "@outcast.by/ts-ext",
+  "version": "0.0.7",
   "description": "",
-  "main": "index.js",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
   "scripts": {
     "test": "jest",
-    "tsc": "tsc"
+    "build": "tsc",
+    "prepublish": "tsc"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/outcastby/js-ext.git"
+    "url": "git+https://github.com/outcastby/ts-ext.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/outcastby/js-ext/issues"
+    "url": "https://github.com/outcastby/ts-ext/issues"
   },
-  "homepage": "https://github.com/outcastby/js-ext#readme",
+  "homepage": "https://github.com/outcastby/ts-ext#readme",
   "devDependencies": {
     "@types/jest": "^24.0.21",
     "@typescript-eslint/eslint-plugin": "^2.6.0",
@@ -38,6 +40,10 @@
     }
   },
   "lint-staged": {
-    "*.{ts,js,tsx,jsx}": ["eslint --fix", "jest --coverage --findRelatedTests", "git add"]
+    "*.{ts,js,tsx,jsx}": [
+      "eslint --fix",
+      "jest --coverage --findRelatedTests",
+      "git add"
+    ]
   }
 }
