@@ -1,4 +1,4 @@
-import User from 'foltd/user'
+import User from 'user'
 
 const sayHello = (user: User): string => `Hello ${user.name}!`
 
