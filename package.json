@@ -2,10 +2,10 @@
   "name": "js-ext",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
     "test": "jest",
-    "tsc": "tsc"
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
