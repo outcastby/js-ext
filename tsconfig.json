@@ -3,7 +3,6 @@
     "target": "ES2015",
     "module": "commonjs",
     "outDir": "build",
-    "rootDir": "src",
     "strict": true,
     "project": "./tsconfig.json",
     "esModuleInterop": true,
@@ -18,7 +17,6 @@
   },
   "exclude": [
     "node_modules",
-    "build",
-    "test"
+    "build"
   ]
 }
