@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ES2015",
+    "target": "ES2018",
     "module": "commonjs",
     "outDir": "build",
     "strict": true,
     "project": "./tsconfig.json",
     "esModuleInterop": true,
     "baseUrl": ".",
+    "allowSyntheticDefaultImports": true,
     "declaration": true,
+    "jsx": "react",
     "paths": {
       "*": [
         "*",
