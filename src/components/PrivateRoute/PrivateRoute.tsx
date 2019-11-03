@@ -2,20 +2,15 @@ import * as React from 'react'
 import { Redirect, Route } from 'react-router-dom'
 import Cookies from 'js-cookie'
 
-interface PrivateRouteProps {
+interface Props {
   title?: string
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  component: React.FunctionComponent<any>
+  component: React.FC<any>
   isAuthorized: boolean
   pathTo?: string
+  [propName: string]: any
 }
 
-const PrivateRoute: React.FunctionComponent<PrivateRouteProps> = ({
-  component: Component,
-  isAuthorized,
-  pathTo,
-  ...rest
-}) => {
+const PrivateRoute: React.FC<Props> = ({ component: Component, isAuthorized, pathTo, ...rest }) => {
   const cookie = Cookies.get('token')
   return (
     <Route
