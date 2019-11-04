@@ -4,28 +4,10 @@ import _ from 'lodash'
 
 test('correct routers', (): void => {
   const views = {
-    custom: {
-      cdnServers: {
-        TestAction
-      }
-    },
+    custom: { cdnServers: { TestAction } },
     crud: {
-      components: {
-        New,
-        Edit,
-        Show,
-        List,
-      },
-      settings: {
-        cdnServers: {
-          list: {},
-          gql: {
-            create: 'some query',
-            update: 'some query',
-            show: 'some query',
-          },
-        },
-      },
+      components: { New, Edit, Show, List },
+      settings: { cdnServers: { list: {}, gql: { create: 'some query', update: 'some query', show: 'some query' } } },
     },
   }
   const expectedResult = [
@@ -44,7 +26,6 @@ test('correct routers', (): void => {
     {
       requiredPermissions: ['cdn_servers', 'view'],
       path: '/cdn_servers',
-      name: 'CdnServers',
       exact: true,
     },
     { path: '/cdn_servers/test_action', requiredPermissions: undefined },
@@ -57,5 +38,5 @@ test('correct routers', (): void => {
   expect(show.component?.displayName).toEqual('Show') // eslint-disable-line
   expect(list.component?.displayName).toEqual('List') // eslint-disable-line
   expect(testAction.component?.displayName).toEqual('TestAction') // eslint-disable-line
-  expect(result.map(r => _.omit(r, 'component'))).toEqual(expectedResult)
+  expect(result.map((r) => _.omit(r, 'component'))).toEqual(expectedResult)
 })

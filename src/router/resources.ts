@@ -46,7 +46,6 @@ const resources = (views: Views, name: string, routes: RouteRequest[]): Route[] 
     result.push({
       requiredPermissions: [_.snakeCase(name), 'view'],
       path: `/${_.snakeCase(name)}`,
-      name: _.upperFirst(name),
       component: List,
       exact: true,
     })

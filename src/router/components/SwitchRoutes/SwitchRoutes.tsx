@@ -6,15 +6,16 @@ import Route from '../../interfaces/Route'
 
 interface Props {
   routes: Route[]
-  filterByPermissions: (routes: Route[]) => Route[]
+  isPermittedRoute: (route: Route) => boolean
   routeProps: object
 }
 
-const SwitchRoutes: React.FC<Props> = ({ routes, routeProps, filterByPermissions }) => {
+const SwitchRoutes: React.FC<Props> = ({ routes, routeProps, isPermittedRoute }) => {
+  const filteredRoutes = routes.filter(isPermittedRoute)
   return (
     <Switch>
-      {filterByPermissions(routes).map((route, index) => {
-        if (typeof route.isAuthorized !== 'undefined' && _.has(route, 'isAuthorized') && route.component)
+      {filteredRoutes.map((route, index) => {
+        if (typeof route.isAuthorized !== 'undefined' && route.component)
           return (
             <PrivateRoute
               component={route.component}
