@@ -2,20 +2,7 @@ import React from 'react'
 import { Switch, Route as RouteComponent, Redirect } from 'react-router-dom'
 import _ from 'lodash'
 import PrivateRoute from '../PrivateRoute'
-
-interface Route {
-  path: string
-  id?: string
-  skipPermissions: boolean
-  exact?: boolean
-  pathTo?: string
-  component?: React.FC<any>
-  isAuthorized?: boolean
-  routes: Route[]
-  schema?: object
-  redirect?: boolean
-}
-
+import Route from '../../router/interfaces/Route'
 interface Props {
   routes: Route[]
   filterByPermissions: (routes: Route[]) => Route[]

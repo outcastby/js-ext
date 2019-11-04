@@ -17,6 +17,7 @@ module.exports = {
   },
   rules: {
     '@typescript-eslint/no-explicit-any': 0,
+    '@typescript-eslint/interface-name-prefix': [1, { "prefixWithI": "never" }],
     // Special ESLint rules or overrides go here.
   },
   settings: {
