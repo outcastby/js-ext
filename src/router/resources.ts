@@ -56,10 +56,11 @@ const resources = (views: Views, name: string, routes: RouteRequest[]): Route[] 
   if (routes) {
     routes.forEach(route => {
       const buttonSettings = (settings[name].headerButtons || []).find((b: any) => b.routeAction === route.routeAction)
+
       result.push({
-        requiredPermissions: buttonSettings?.requiredPermissions, // eslint-disable-line
         path: `/${_.snakeCase(name)}/${_.snakeCase(route.routeAction)}`,
-        component: _.get(custom, [name, _.upperFirst(route.routeAction)]),
+        component: _.get(custom, [name, _.upperFirst(_.camelCase(route.routeAction))]),
+        requiredPermissions: buttonSettings?.requiredPermissions, // eslint-disable-line
       })
     })
   }
