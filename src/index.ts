@@ -3,3 +3,5 @@ export { default as Router } from './router'
 export { default as fp } from './utils/fp'
 
 export { default as SwitchRoutes } from './router/components/SwitchRoutes'
+
+export { default as Modal } from './components/Modal'
