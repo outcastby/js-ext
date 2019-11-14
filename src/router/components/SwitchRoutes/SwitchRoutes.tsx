@@ -8,9 +8,10 @@ interface Props {
   routes: Route[]
   isPermittedRoute: (route: Route) => boolean
   routeProps: object
+  tokenKey?: string
 }
 
-const SwitchRoutes: React.FC<Props> = ({ routes, routeProps, isPermittedRoute }) => {
+const SwitchRoutes: React.FC<Props> = ({ routes, routeProps, isPermittedRoute, tokenKey }) => {
   const filteredRoutes = routes.filter(isPermittedRoute)
   return (
     <Switch>
@@ -23,6 +24,7 @@ const SwitchRoutes: React.FC<Props> = ({ routes, routeProps, isPermittedRoute })
               key={index}
               path={route.path}
               pathTo={route.pathTo}
+              tokenKey={tokenKey}
             />
           )
         if (route.redirect && route.pathTo) return <Redirect from={route.path} key={index} to={route.pathTo} />

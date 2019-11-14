@@ -7,11 +7,12 @@ interface Props {
   component: React.FC<any>
   isAuthorized: boolean
   pathTo?: string
+  tokenKey?: string
   [propName: string]: any
 }
 
-const PrivateRoute: React.FC<Props> = ({ component: Component, isAuthorized, pathTo, ...rest }) => {
-  const cookie = Cookies.get('token')
+const PrivateRoute: React.FC<Props> = ({ component: Component, isAuthorized, pathTo, tokenKey = 'token', ...rest }) => {
+  const cookie = Cookies.get(tokenKey)
   return (
     <Route
       {...rest}
