@@ -1,6 +1,5 @@
 import React from 'react'
 import { Switch, Route as RouteComponent, Redirect } from 'react-router-dom'
-import _ from 'lodash'
 import PrivateRoute from '../PrivateRoute'
 import Route from '../../interfaces/Route'
 
