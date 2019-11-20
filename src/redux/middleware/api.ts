@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import { GraphQLError } from 'graphql'
 import graphql from '../../utils/graphql'
 import { Action } from '../interfaces'
@@ -8,7 +7,11 @@ export interface CallbackObj {
   callback: Function
 }
 
-const apiMiddleware = (invalidTokenCallback: Function, callbackList?: CallbackObj[]) => () => (next: any) => (
+export interface Callback {
+  (action: Action, errors: object): void
+}
+
+const apiMiddleware = (invalidTokenCallback: Callback, callbackList?: CallbackObj[]) => () => (next: any) => (
   action: Action
 ): object => {
   if (!action.request) {
@@ -19,7 +22,7 @@ const apiMiddleware = (invalidTokenCallback: Function, callbackList?: CallbackOb
   const SUCCESS = action.type
   const FAILURE = `${action.type}_FAILURE`
 
-  next({ type: REQUEST, ..._.omit(action, ['type']) })
+  next({ ...action, type: REQUEST })
 
   return graphql
     .fetch(action.request.query, action.request.variables)

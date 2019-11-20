@@ -4,7 +4,7 @@ import Config from '../config'
 
 const set = (key: string, value: string): void => {
   Cookies.set(key, sjcl.encrypt(Config.get(['jsExt', 'secretKey']), value), {
-    expires: Config.get('cookiesExpires'),
+    expires: Config.get(['jsExt', 'cookiesExpires']),
     secure: process.env.NODE_ENV === 'production',
   })
 }

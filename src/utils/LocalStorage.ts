@@ -1,8 +1,10 @@
 import _ from 'lodash'
 import fp from './fp'
+import Config from '../config'
 
 const NAMESPACE = 'dashCache'
 
+// ToDo (mikhail): change to FP
 class LocalStorage {
   private values: {}
   constructor() {
@@ -13,7 +15,7 @@ class LocalStorage {
     if (!Array.isArray(path)) {
       path = path.split('.')
     }
-    this.values = JSON.parse(localStorage.getItem(NAMESPACE) || '')
+    this.values = JSON.parse(localStorage.getItem(Config.get(['jsExt', 'namespace'], NAMESPACE)) || '')
     return fp.getIn(this.values, path)
   }
 
@@ -23,13 +25,11 @@ class LocalStorage {
     }
     this.values = fp.setIn(this.values, path, value)
     this.values = _.mergeWith(
-      JSON.parse(localStorage.getItem(NAMESPACE) || '') || {},
+      JSON.parse(localStorage.getItem(Config.get(['jsExt', 'namespace'], NAMESPACE)) || '') || {},
       this.values,
-      (oldVal, newVal) => {
-        return newVal
-      }
+      (oldVal, newVal) => newVal
     )
-    localStorage.setItem(NAMESPACE, JSON.stringify(this.values))
+    localStorage.setItem(Config.get(['jsExt', 'namespace'], NAMESPACE), JSON.stringify(this.values))
   }
 }
 
