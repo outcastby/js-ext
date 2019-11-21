@@ -220,19 +220,13 @@ export default {
 Create config file for jsExt:
 
 ```javascript
-import axios from 'axios'
-
 export default {
   gql: {
-    axios,
     url: `${process.env.REACT_APP_SERVER_URL}/public`,
     options: { withCredentials: true },
   },
 }
 ```
-
-We have to add `axios` in we wanna use global headers, interceptors, etc inside the main app.
-`options` used as third argument for `axios.post` function
 
 Usage example:
 

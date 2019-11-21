@@ -33,9 +33,7 @@ export default {
     }
     const { clone, files } = extractFiles(data)
 
-    const axiosFunc = Config.get(['jsExt', 'gql', 'axios'], axios)
-
-    return axiosFunc.post(url || Config.get(['jsExt', 'gql', 'url']), adaptData(clone, files), options(files))
+    return axios.post(url || Config.get(['jsExt', 'gql', 'url']), adaptData(clone, files), options(files))
   },
 }
 
