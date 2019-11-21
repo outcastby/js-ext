@@ -1,9 +1,9 @@
 {
   "name": "@outcast.by/js-ext",
-  "version": "0.0.22",
+  "version": "0.0.26",
   "description": "",
   "main": "build/src/index.js",
-  "types": "build/index.d.ts",
+  "types": "build/src/index.d.ts",
   "scripts": {
     "test": "jest",
     "build": "tsc",
@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/outcastby/ts-ext.git"
+    "url": "git+https://github.com/outcastby/js-ext.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/outcastby/ts-ext/issues"
+    "url": "https://github.com/outcastby/js-ext/issues"
   },
-  "homepage": "https://github.com/outcastby/ts-ext#readme",
+  "homepage": "https://github.com/outcastby/js-ext#readme",
   "devDependencies": {
     "@types/jest": "^24.0.21",
     "@typescript-eslint/eslint-plugin": "^2.6.1-alpha.0",
@@ -51,9 +51,15 @@
     "@types/lodash": "^4.14.144",
     "@types/react": "^16.9.11",
     "@types/react-router-dom": "^5.1.2",
+    "@types/sjcl": "^1.0.28",
+    "axios": "^0.19.0",
     "eslint-plugin-react": "^7.16.0",
+    "extract-files": "^5.0.1",
+    "graphql": "^14.5.8",
+    "js-cookie": "^2.2.1",
     "prettier-eslint-cli": "^5.0.0",
-    "react": "^16.11.0"
+    "react": "^16.11.0",
+    "sjcl": "^1.0.8"
   },
   "exclude": [
     "node_modules",
