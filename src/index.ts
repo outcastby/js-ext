@@ -9,3 +9,7 @@ export { default as Config } from './config'
 export { default as SwitchRoutes } from './router/components/SwitchRoutes'
 
 export { default as Modal } from './components/Modal'
+
+// interfaces
+export { Action } from './redux/interfaces'
+export { default as Dictionary } from './interfaces/Dictionary'

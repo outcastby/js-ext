@@ -5,8 +5,8 @@ export interface HandlerMap<T> {
 }
 export interface Action {
   type: string
-  request: Request
-  payload: object
+  request?: Request
+  payload?: object
 }
 
 export interface Reducer {
@@ -16,5 +16,5 @@ export interface Reducer {
 interface Request {
   query: ASTNode
   variables: object
-  multi: boolean
+  multi?: boolean
 }

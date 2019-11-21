@@ -42,7 +42,7 @@ const apiMiddleware = (invalidTokenCallback: TokenCallback, interceptors?: Inter
           next({ type: FAILURE, errors: resp.data.errors, requestAction: action })
           throw new GraphQLError(resp.data.errors)
         } else {
-          const response = action.request.multi ? resp.data.data : resp.data.data[Object.keys(resp.data.data)[0]]
+          const response = action.request?.multi ? resp.data.data : resp.data.data[Object.keys(resp.data.data)[0]]
           next({ type: SUCCESS, data: response, requestAction: action })
           return response
         }
