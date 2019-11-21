@@ -71,8 +71,10 @@ import { Config } from '@outcast.by/js-ext'
 
    export default {
      jsExt,
-     cookiesExpires: 14, // days
-     secretKey: process.env.REACT_APP_SECRET_KEY,
+     cookies: {
+       expires: 14, // days
+       secretKey: process.env.REACT_APP_SECRET_KEY,
+     },
    }
    ```
 
@@ -105,8 +107,8 @@ Add new value to config after initialization
 `path` can be string or list of strings
 
 ```javascript
-Config.setIn(['jsExt', 'cookiesExpires'], 10)
-Config.setIn('cookiesExpires', 10)
+Config.setIn(['jsExt', 'expires'], 10)
+Config.setIn('expires', 10)
 ```
 
 ## Utils
@@ -116,40 +118,45 @@ Config.setIn('cookiesExpires', 10)
 Encrypting cookies
 
 #### Setup
-Add `secretKey` and `cookiesExpires` to `jsExt` config
+
+Add `secretKey` and `expires` to `jsExt` config
 
 Example:
+
 ```javascript
 // config/common/jsExt.js
 
 export default {
   ...
-  secretKey: 'secretKey',
-  cookiesExpires: 14, // days
+  cookies: {
+    secretKey: 'secretKey',
+    cookiesExpires: 14, // days
+  }
 }
 ```
 
 #### Functions:
+
 1. `Cookies.set(key, value)`
-    Sets encrypted value to cookies
-    ```javascript
-    Cookies.set('key', 'value')
-    ```
+   Sets encrypted value to cookies
+   ```javascript
+   Cookies.set('key', 'value')
+   ```
 2. `Cookies.get(key)`
-    Get not decrypted value from cookies
-    ```javascript
-    Cookies.get('key')
-    ```
+   Get not decrypted value from cookies
+   ```javascript
+   Cookies.get('key')
+   ```
 3. `Cookies.getDecrypted(key)`
-    Get decrypted value from cookies
-    ```javascript
-    Cookies.getDecrypted('key')
-    ```
+   Get decrypted value from cookies
+   ```javascript
+   Cookies.getDecrypted('key')
+   ```
 4. `Cookies.remove(key)`
-    Remove cookie by key
-    ```javascript
-    Cookies.remove('key')
-    ```
+   Remove cookie by key
+   ```javascript
+   Cookies.remove('key')
+   ```
 
 ### graphql
 
@@ -159,9 +166,11 @@ Create config file for jsExt:
 import axios from 'axios'
 
 export default {
-  axios,
-  url: `${process.env.REACT_APP_SERVER_URL}/public`,
-  options: { withCredentials: true },
+  gql: {
+    axios,
+    url: `${process.env.REACT_APP_SERVER_URL}/public`,
+    options: { withCredentials: true },
+  }
 }
 ```
 
@@ -185,7 +194,7 @@ Provide gql middleware for redux store
 ```javascript
 import { Redux } from '@outcast.by/js-ext'
 
-const callbackList = [
+const interceptors = [
   {
     condition: (resp) => resp.data.errors && false,
     callback: () => alert('This callback will not called'),
@@ -200,7 +209,7 @@ const invalidTokenCallback = (action, errors) => {
   console.log('errors', errors)
 }
 
-const api = Redux.apiMiddleware(invalidTokenCallback, callbackList)
+const api = Redux.apiMiddleware(invalidTokenCallback, interceptors)
 ```
 
 `invalidTokenCallback` will called if `errors.response?.data === 'invalid_access_token'`
@@ -268,9 +277,20 @@ export default function BaseModal({ current }) {
 }
 ```
 
-`current` - list of names of current modals
+`current` - list of <Current> objects.
+Example:
+```javascript
+[{name: 'Profile', params: {title: 'My Profile'}}, {name: 'Error', params: {title: 'Error!'}}]
+```
 
 `modals` - object where key is modal name, value is modal component
+Example:
+```javascript
+{
+  Profile: ProfileModal,
+  Error: ErrorModal,
+}
+```
 
 ```javascript
 // modals/index.js

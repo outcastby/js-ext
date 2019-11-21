@@ -41,7 +41,7 @@ const adaptData = (data: object, files: Map<File, string[]>): object | FormData 
 }
 
 const options = (files: Map<File, string[]>): object => {
-  if (!files.size) return Config.get(['jsExt', 'options']) || {}
+  if (!files.size) return Config.get(['jsExt', 'gql', 'options']) || {}
   return { headers: { 'Content-Type': 'multipart/form-data' } }
 }
 
@@ -52,9 +52,9 @@ const fetch = (query: ASTNode, variables: object, url?: string): Promise<FetchRe
   }
   const { clone, files } = extractFiles(data)
 
-  const axiosFunc = Config.get(['jsExt', 'axios'], axios)
+  const axiosFunc = Config.get(['jsExt', 'gql', 'axios'], axios)
 
-  return axiosFunc.post(url || Config.get(['jsExt', 'url']), adaptData(clone, files), options(files))
+  return axiosFunc.post(url || Config.get(['jsExt', 'gql', 'url']), adaptData(clone, files), options(files))
 }
 
 export default {

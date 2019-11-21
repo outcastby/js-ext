@@ -2,7 +2,7 @@ import { GraphQLError } from 'graphql'
 import graphql from '../../utils/graphql'
 import { Action } from '../interfaces'
 
-export interface CallbackObj {
+export interface Interceptor  {
   condition: Function
   callback: Function
 }
@@ -11,7 +11,7 @@ export interface Callback {
   (action: Action, errors: object): void
 }
 
-const apiMiddleware = (invalidTokenCallback: Callback, callbackList?: CallbackObj[]) => () => (next: any) => (
+const apiMiddleware = (invalidTokenCallback: Callback, interceptors?: Interceptor[]) => () => (next: any) => (
   action: Action
 ): object => {
   if (!action.request) {
@@ -35,9 +35,9 @@ const apiMiddleware = (invalidTokenCallback: Callback, callbackList?: CallbackOb
     })
     .then((resp) => {
       if (resp?.data) {
-        const callbackObj = callbackList?.find(({ condition }): CallbackObj | null => condition(resp))
-        if (callbackObj) {
-          next(callbackObj.callback(resp))
+        const interceptor = interceptors?.find(({ condition }): Interceptor | null => condition(resp))
+        if (interceptor) {
+          next(interceptor.callback(resp))
         } else if (resp.data.errors) {
           next({ type: FAILURE, errors: resp.data.errors, requestAction: action })
           throw new GraphQLError(resp.data.errors)
