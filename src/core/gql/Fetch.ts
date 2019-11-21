@@ -16,7 +16,7 @@ interface Config {
   url: string
 }
 
-interface FetchResponse {
+export interface FetchResponse {
   data: ResponseData
 }
 
