@@ -3,8 +3,8 @@ import { ASTNode, print } from 'graphql'
 // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 import { extractFiles } from 'extract-files'
-import Dictionary from '../interfaces/Dictionary'
-import Config from '../config'
+import Dictionary from '../../interfaces/Dictionary'
+import Config from '../../config'
 
 interface File extends Blob {
   name: string
@@ -25,6 +25,20 @@ interface ResponseData {
   errors: string
 }
 
+export default {
+  run: (query: ASTNode, variables: object, url?: string): Promise<FetchResponse> => {
+    const data = {
+      query: print(query),
+      variables,
+    }
+    const { clone, files } = extractFiles(data)
+
+    const axiosFunc = Config.get(['jsExt', 'gql', 'axios'], axios)
+
+    return axiosFunc.post(url || Config.get(['jsExt', 'gql', 'url']), adaptData(clone, files), options(files))
+  },
+}
+
 const adaptData = (data: object, files: Map<File, string[]>): object | FormData => {
   if (!files.size) return data
   const formData = new FormData()
@@ -43,20 +57,4 @@ const adaptData = (data: object, files: Map<File, string[]>): object | FormData 
 const options = (files: Map<File, string[]>): object => {
   if (!files.size) return Config.get(['jsExt', 'gql', 'options']) || {}
   return { headers: { 'Content-Type': 'multipart/form-data' } }
-}
-
-const fetch = (query: ASTNode, variables: object, url?: string): Promise<FetchResponse> => {
-  const data = {
-    query: print(query),
-    variables,
-  }
-  const { clone, files } = extractFiles(data)
-
-  const axiosFunc = Config.get(['jsExt', 'gql', 'axios'], axios)
-
-  return axiosFunc.post(url || Config.get(['jsExt', 'gql', 'url']), adaptData(clone, files), options(files))
-}
-
-export default {
-  fetch,
 }

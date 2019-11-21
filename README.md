@@ -158,7 +158,7 @@ export default {
    Cookies.remove('key')
    ```
 
-### graphql
+### GQLFetch
 
 Create config file for jsExt:
 
@@ -180,9 +180,9 @@ We have to add `axios` in we wanna use global headers, interceptors, etc inside 
 Usage example:
 
 ```javascript
-import { graphql } from '@outcast.by/js-ext'
+import { GQLFetch } from '@outcast.by/js-ext'
 
-graphql.fetch(query, variables)
+GQLFetch.run(query, variables)
 ```
 
 ## Redux

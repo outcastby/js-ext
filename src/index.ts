@@ -1,7 +1,7 @@
 export { default as Redux } from './redux'
 export { default as Router } from './router'
 export { default as fp } from './utils/fp'
-export { default as graphql } from './utils/graphql'
+export { default as GQLFetch } from './core/gql/Fetch'
 export { default as Cookies } from './utils/cookies'
 export { default as LocalStorage } from './utils/LocalStorage'
 export { default as Config } from './config'

@@ -1,17 +1,17 @@
 import { GraphQLError } from 'graphql'
-import graphql from '../../utils/graphql'
+import GQLFetch from '../../core/gql/Fetch'
 import { Action } from '../interfaces'
 
 export interface Interceptor  {
-  condition: Function
-  callback: Function
+  condition: (response: object) => boolean
+  callback: (response: object) => void
 }
 
-export interface Callback {
+export interface TokenCallback {
   (action: Action, errors: object): void
 }
 
-const apiMiddleware = (invalidTokenCallback: Callback, interceptors?: Interceptor[]) => () => (next: any) => (
+const apiMiddleware = (invalidTokenCallback: TokenCallback, interceptors?: Interceptor[]) => () => (next: any) => (
   action: Action
 ): object => {
   if (!action.request) {
@@ -24,8 +24,8 @@ const apiMiddleware = (invalidTokenCallback: Callback, interceptors?: Intercepto
 
   next({ ...action, type: REQUEST })
 
-  return graphql
-    .fetch(action.request.query, action.request.variables)
+  return GQLFetch
+    .run(action.request.query, action.request.variables)
     .catch((errors) => {
       next({ type: FAILURE, errors, requestAction: action })
       if (errors.response?.data === 'invalid_access_token') { // eslint-disable-line
@@ -35,7 +35,7 @@ const apiMiddleware = (invalidTokenCallback: Callback, interceptors?: Intercepto
     })
     .then((resp) => {
       if (resp?.data) {
-        const interceptor = interceptors?.find(({ condition }): Interceptor | null => condition(resp))
+        const interceptor = interceptors?.find(({ condition }): boolean => condition(resp))
         if (interceptor) {
           next(interceptor.callback(resp))
         } else if (resp.data.errors) {
