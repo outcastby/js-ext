@@ -6,8 +6,8 @@
   "types": "build/src/index.d.ts",
   "scripts": {
     "test": "jest",
-    "build": "tsc",
-    "prepublish": "tsc"
+    "build": "ttsc",
+    "prepublish": "ttsc"
   },
   "repository": {
     "type": "git",
@@ -32,6 +32,8 @@
     "lint-staged": "^9.4.2",
     "prettier": "^1.18.2",
     "ts-jest": "^24.1.0",
+    "ts-transformer-imports": "^0.4.3",
+    "ttypescript": "^1.5.8",
     "typescript": "^3.7.1-rc"
   },
   "husky": {
@@ -59,6 +61,7 @@
     "js-cookie": "^2.2.1",
     "prettier-eslint-cli": "^5.0.0",
     "react": "^16.11.0",
+    "react-router-dom": "^5.1.2",
     "sjcl": "^1.0.8"
   },
   "exclude": [

@@ -6,16 +6,13 @@
     "strict": true,
     "project": "./tsconfig.json",
     "esModuleInterop": true,
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "allowSyntheticDefaultImports": true,
     "declaration": true,
     "jsx": "react",
-    "paths": {
-      "*": [
-        "*",
-        "src/*"
-      ]
-    }
+    "plugins": [
+      { "transform": "ts-transformer-imports" }
+    ]
   },
   "exclude": [
     "node_modules",
