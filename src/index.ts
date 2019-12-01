@@ -9,6 +9,11 @@ export { default as Config } from 'config'
 export { default as SwitchRoutes } from 'router/components/SwitchRoutes'
 
 export { default as Modal } from 'components/Modal'
+export { default as Form } from 'components/Form'
+export { default as InputList } from 'components/Form/InputList'
+export { default as InputRow } from 'components/Form/InputRow'
+export { default as Text } from 'components/Form/inputs/Text'
+export { default as JSON } from 'components/Form/inputs/JSON'
 
 // interfaces
 export { Action } from 'redux/interfaces'
