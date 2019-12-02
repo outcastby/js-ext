@@ -61,6 +61,7 @@
     "graphql": "^14.5.8",
     "js-cookie": "^2.2.1",
     "prettier-eslint-cli": "^5.0.0",
+    "query-string": "^6.9.0",
     "react": "^16.11.0",
     "react-router-dom": "^5.1.2",
     "sjcl": "^1.0.8",

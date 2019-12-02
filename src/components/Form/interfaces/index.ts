@@ -1,3 +1,4 @@
+export { default as Settings } from './Settings'
 export { default as Field } from './Field'
 export { default as Event } from './Event'
 export { default as Context } from './Context'

@@ -10,14 +10,13 @@ interface Props {
   actionType: 'edit' | 'new'
   value: any
   layout: 'horizontal' | 'vertical'
-  grid: Dictionary<any>
+  grid?: Dictionary<any>
   onChange: (event: Event) => void
   success: boolean
   error: boolean
   helpText: string
   field: Field
   id?: number
-  history: Location
 }
 
 const InputRow: React.FC<Props> = (props) => {
