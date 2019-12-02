@@ -39,7 +39,7 @@ const Select: React.FC<InputComponentProps> = (props) => {
     )
   }
 
-  const [options, setOptions] = useState(normalizeOptions(field.values))
+  const [options, setOptions] = useState(normalizeOptions(field.values || []))
 
   const forceChange = (firstValue: undefined | Option): void => {
     if (allowEmpty) return
@@ -48,8 +48,10 @@ const Select: React.FC<InputComponentProps> = (props) => {
       return onChange({ target: { name, value: value.map((v: { id: string | number }) => v.id) } })
     }
 
-    // eslint-disable-next-line prettier/prettier
-    onChange({ target: { name, value: multiple ? [] : firstValue?.value } })
+    if (!value) {
+      // eslint-disable-next-line prettier/prettier
+      onChange({ target: { name, value: multiple ? [] : firstValue?.value } })
+    }
   }
 
   const getValue = (): any => {

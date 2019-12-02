@@ -7,6 +7,7 @@ import inputs from '../inputs'
 import FakeInput from '../inputs/FakeInput'
 
 interface Props {
+  actionType: 'edit' | 'new'
   value: any
   layout: 'horizontal' | 'vertical'
   grid: Dictionary<any>

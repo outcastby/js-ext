@@ -7,4 +7,5 @@ export default interface InputComponentProps {
   name?: string | string[]
   onChange: (event: Event) => void
   field: Field
+  actionType: 'edit' | 'new'
 }

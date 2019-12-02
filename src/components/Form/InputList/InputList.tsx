@@ -47,7 +47,10 @@ const InputList: React.FC<Props> = ({ layout, values, name, onChange, field }) =
     onChange({ target: { name: getFullName().join(','), value } })
   }
 
-  const getFullName = (): string[] => (name ? [...name, field.name] : [field.name])
+  const getFullName = (): string[] => {
+    const fullName = name ? [...name, field.name] : [field.name]
+    return _.flatten(fullName)
+  }
 
   const Component = getStatelessComponent()
 

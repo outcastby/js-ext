@@ -1,4 +1,5 @@
 import React from 'react'
+import Dictionary from 'interfaces/Dictionary'
 
 export interface Option {
   value: string
@@ -7,12 +8,15 @@ export interface Option {
 
 export default interface Field {
   label?: string
-  name: string
+  name: string | string[]
   type: string
-  values: (Option | string)[] | (() => Promise<any>)
+  values?: (Option | string)[] | (() => Promise<any>)
   multiple?: boolean
   allowEmpty?: boolean
+  collapsed?: boolean
   defaultValue?: any
-  component: React.FC<any>
+  component?: React.FC<any>
   requiredPermissions?: string[]
+  availableIf?: (value: Dictionary<any>, actionType: 'new' | 'edit') => boolean
+  fields?: Field[]
 }

@@ -1,5 +1,2 @@
 !.eslintrc.js
 build/
-src/components/Form/inputs/File.tsx
-src/components/Form/inputs/SmartJSON
-src/components/Form/inputs/DatePicker

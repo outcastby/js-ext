@@ -1,5 +1,5 @@
 import Proxy from './Proxy'
-// import SmartJSON from './SmartJSON'
+import SmartJSON from './SmartJSON'
 import Select from './Select'
 import JSON from './JSON'
 import Dictionary from 'interfaces/Dictionary'
@@ -11,7 +11,7 @@ const inputs: Dictionary<any> = {
   checkbox: Proxy,
   datePicker: Proxy,
   json: JSON,
-  // smartJSON: SmartJSON,
+  smartJSON: SmartJSON,
   select: Select,
   file: Proxy,
   password: Proxy,
