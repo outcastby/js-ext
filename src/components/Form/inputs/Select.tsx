@@ -3,6 +3,7 @@ import _ from 'lodash'
 import { InputComponentProps } from '../interfaces'
 import Config from 'config'
 import { Option } from '../interfaces/Field'
+import FakeInput from "./FakeInput"
 
 const Select: React.FC<InputComponentProps> = (props) => {
   const {
@@ -56,12 +57,13 @@ const Select: React.FC<InputComponentProps> = (props) => {
       return value.map((v) => v.id)
     }
 
+    // TODO (atanych): remove the line below if select will work properly
     // if (_.isObject(value) && value.value) return value.value
 
     return value
   }
 
-  const Component = Config.get(['jsExt', 'form', 'inputs', props.field.type])
+  const Component = Config.get(['jsExt', 'form', 'inputs', props.field.type], FakeInput)
 
   return <Component {...props} value={getValue()} options={options} />
 }

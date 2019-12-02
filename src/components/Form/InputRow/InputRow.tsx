@@ -4,6 +4,7 @@ import Config from 'config'
 import InputList from '../InputList'
 import Dictionary from '../../../interfaces/Dictionary'
 import inputs from '../inputs'
+import FakeInput from '../inputs/FakeInput'
 
 interface Props {
   value: any
@@ -44,8 +45,9 @@ const InputRow: React.FC<Props> = (props) => {
     return null
 
   const Component = Config.get(['jsExt', 'form', 'InputRow'])
+  const Input = component || inputs[type] || FakeInput
 
-  return <Component {...props} Input={component || inputs[type]} hasLabel={hasLabel()} />
+  return <Component {...props} Input={Input} hasLabel={hasLabel()} />
 }
 
 export default InputRow
