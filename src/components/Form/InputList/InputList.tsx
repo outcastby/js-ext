@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
 import v4 from 'uuid/v4'
 import Dictionary from 'interfaces/Dictionary'
-import { Field, Event } from '../interfaces'
-import Config from 'config'
+import { Field, Event, Config } from '../interfaces'
 import _ from 'lodash'
 
 interface Props {
+  config: Config
   values: Value[]
   layout: 'horizontal' | 'vertical'
   name?: string | string[]
@@ -18,20 +18,7 @@ interface Value {
   __uuid: string
 }
 
-interface StatelessProps {
-  hasLabel: boolean
-  values?: Dictionary<any>[]
-  name: string[]
-  field: Field
-  layout: 'horizontal' | 'vertical'
-  onChange: (event: Event) => void
-  onAdd: () => void
-  onRemove: (value: Value) => void
-}
-
-const getStatelessComponent = (): React.FC<StatelessProps> => Config.get(['jsExt', 'form', 'InputList'])
-
-const InputList: React.FC<Props> = ({ layout, values, name, onChange, field }) => {
+const InputList: React.FC<Props> = ({ layout, values, name, onChange, field, config }) => {
   useEffect(() => {
     // TODO (atanych): draw up the way ho to avoid the timer. The timer reason: we can not change state during setup components
     setTimeout(() => {
@@ -52,10 +39,8 @@ const InputList: React.FC<Props> = ({ layout, values, name, onChange, field }) =
     return _.flatten(fullName)
   }
 
-  const Component = getStatelessComponent()
-
   return (
-    <Component
+    <config.InputList
       layout={layout}
       field={{ ...field, type: _.trim(field.type, '[]') }}
       hasLabel={!!field.label}

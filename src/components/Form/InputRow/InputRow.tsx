@@ -1,6 +1,5 @@
 import React from 'react'
-import { Event, Field } from '../interfaces'
-import Config from 'config'
+import { Event, Field, Config } from '../interfaces'
 import InputList from '../InputList'
 import Dictionary from '../../../interfaces/Dictionary'
 import inputs from '../inputs'
@@ -16,7 +15,7 @@ interface Props {
   error: boolean
   helpText: string
   field: Field
-  config?: Dictionary<any>
+  config: Config
   id?: number
 }
 
@@ -27,11 +26,11 @@ const InputRow: React.FC<Props> = (props) => {
     layout,
     onChange,
     value,
-    config = {},
+    config,
   } = props
 
   if (type.includes('[]')) {
-    return <InputList layout={layout} onChange={onChange} values={value} field={field} />
+    return <InputList layout={layout} onChange={onChange} values={value} field={field} config={config} />
   }
 
   const hasLabel = (): boolean => {
@@ -41,15 +40,17 @@ const InputRow: React.FC<Props> = (props) => {
     return true
   }
 
-  const hasPermission = Config.get(['jsExt', 'form', 'hasPermissions'])
-
-  if (requiredPermissions && requiredPermissions.length && hasPermission && !hasPermission(requiredPermissions[0]))
+  if (
+    requiredPermissions &&
+    requiredPermissions.length &&
+    config.hasPermission &&
+    !config.hasPermission(requiredPermissions[0])
+  )
     return null
 
-  const Component = config.InputRow || Config.get(['jsExt', 'form', 'InputRow'])
   const Input = component || inputs[type] || FakeInput
 
-  return <Component {...props} Input={Input} hasLabel={hasLabel()} />
+  return <config.InputRow {...props} Input={Input} hasLabel={hasLabel()} />
 }
 
 export default InputRow

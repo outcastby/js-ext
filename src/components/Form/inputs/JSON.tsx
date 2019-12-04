@@ -1,10 +1,9 @@
 import React from 'react'
 import _ from 'lodash'
-import Config from 'config'
 import { InputComponentProps } from '../interfaces'
 
 const JSON: React.FC<InputComponentProps> = (props) => {
-  const { onChange, value, field: { name, defaultValue, type } } = props
+  const { onChange, value, config, field: { name, defaultValue, type } } = props
 
   const handleChange = (v: any): void => {
     // eslint-disable-next-line prettier/prettier
@@ -18,7 +17,7 @@ const JSON: React.FC<InputComponentProps> = (props) => {
     return _.omit(value || defaultValue, ['__uuid'])
   }
 
-  const Component = Config.get(['jsExt', 'form', 'inputs', type])
+  const Component = config.inputs[type]
 
   return <Component {...props} value={getValue()} onChange={handleChange} />
 }

@@ -4,13 +4,14 @@ import _ from 'lodash'
 import { getIn, setIn } from 'utils/fp'
 import { normalize, isGraphQLError } from 'utils/errors'
 import FormUtils from 'utils/form'
-import { Event, Settings } from './interfaces'
+import { Event, Settings, Config as IConfig } from './interfaces'
 import Dictionary from '../../interfaces/Dictionary'
-import Config from '../../config'
+import Config from "../../config"
 
 const STRINGIFIED_TYPES = ['smartJSON', 'json']
 
 interface Props {
+  config?: IConfig
   settings: Settings
   entity: Dictionary<any>
   customButtons: (context: { onSubmit: () => void }) => React.FC<any>
@@ -102,10 +103,10 @@ class Form extends React.Component<Props, { errors?: Dictionary<any> }> {
   }
 
   render(): any {
-    const Component = Config.get(['jsExt', 'form', 'Form'])
-
+    const Component = this.props.config?.Form || Config.get(['jsExt', 'form', 'Form'])
     return (
       <Component
+        config={this.props.config || Config.get(['jsExt', 'form'])}
         {...this.props}
         errors={this.state.errors || {}}
         onSubmit={this.onSubmit}

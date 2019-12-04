@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import _ from 'lodash'
 import { InputComponentProps, Field } from '../interfaces'
-import Config from 'config'
 import FakeInput from './FakeInput'
 import Form from 'utils/form'
 
@@ -11,6 +10,7 @@ const SmartJSON: React.FC<InputComponentProps> = (props) => {
     actionType,
     field: { fields = [], name, type },
     field,
+    config,
   } = props
 
   const fieldName: string[] = _.isArray(name) ? name : [name]
@@ -26,7 +26,7 @@ const SmartJSON: React.FC<InputComponentProps> = (props) => {
     }, [])
   }
 
-  const Component = Config.get(['jsExt', 'form', 'inputs', type], FakeInput)
+  const Component = config.inputs[props.field.type] || FakeInput
 
   return (
     <Component

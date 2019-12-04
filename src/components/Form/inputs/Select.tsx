@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import _ from 'lodash'
 import { InputComponentProps } from '../interfaces'
-import Config from 'config'
 import { Option } from '../interfaces/Field'
 import FakeInput from "./FakeInput"
 
 const Select: React.FC<InputComponentProps> = (props) => {
   const {
     onChange,
+    config,
     value,
     field: { name, multiple, allowEmpty },
     field,
@@ -65,7 +65,7 @@ const Select: React.FC<InputComponentProps> = (props) => {
     return value
   }
 
-  const Component = Config.get(['jsExt', 'form', 'inputs', props.field.type], FakeInput)
+  const Component = config.inputs[props.field.type] || FakeInput
 
   return <Component {...props} value={getValue()} options={options} />
 }
