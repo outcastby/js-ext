@@ -2,7 +2,7 @@ import { GraphQLError } from 'graphql'
 import GQLFetch from '../../core/gql/Fetch'
 import { Action } from '../interfaces'
 
-export interface Interceptor  {
+export interface Interceptor {
   condition: (response: object) => boolean
   callback: (response: object) => void
 }
@@ -24,8 +24,7 @@ const apiMiddleware = (invalidTokenCallback: TokenCallback, interceptors?: Inter
 
   next({ ...action, type: REQUEST })
 
-  return GQLFetch
-    .run(action.request.query, action.request.variables)
+  return GQLFetch.run(action.request.query, action.request.variables)
     .catch((errors) => {
       next({ type: FAILURE, errors, requestAction: action })
       if (errors.response?.data === 'invalid_access_token') { // eslint-disable-line

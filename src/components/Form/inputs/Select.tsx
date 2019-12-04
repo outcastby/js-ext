@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import _ from 'lodash'
 import { InputComponentProps } from '../interfaces'
 import { Option } from '../interfaces/Field'
-import FakeInput from "./FakeInput"
+import FakeInput from './FakeInput'
 
 const Select: React.FC<InputComponentProps> = (props) => {
   const {

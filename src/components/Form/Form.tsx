@@ -1,4 +1,4 @@
-import React  from 'react'
+import React from 'react'
 import queryString from 'query-string'
 import _ from 'lodash'
 import { getIn, setIn } from 'utils/fp'
@@ -6,7 +6,7 @@ import { normalize, isGraphQLError } from 'utils/errors'
 import FormUtils from 'utils/form'
 import { Event, Settings, Config as IConfig } from './interfaces'
 import Dictionary from '../../interfaces/Dictionary'
-import Config from "../../config"
+import Config from '../../config'
 
 const STRINGIFIED_TYPES = ['smartJSON', 'json']
 
@@ -21,7 +21,6 @@ interface Props {
   onSuccess?: () => Promise<any>
   onSubmit: (vars: Dictionary<any>) => Promise<any>
 }
-
 
 // TODO (atanych): use FP component after reducing multiple updates of state
 class Form extends React.Component<Props, { errors?: Dictionary<any> }> {
