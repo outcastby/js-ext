@@ -16,6 +16,7 @@ interface Props {
   error: boolean
   helpText: string
   field: Field
+  config?: Dictionary<any>
   id?: number
 }
 
@@ -26,6 +27,7 @@ const InputRow: React.FC<Props> = (props) => {
     layout,
     onChange,
     value,
+    config = {},
   } = props
 
   if (type.includes('[]')) {
@@ -44,7 +46,7 @@ const InputRow: React.FC<Props> = (props) => {
   if (requiredPermissions && requiredPermissions.length && hasPermission && !hasPermission(requiredPermissions[0]))
     return null
 
-  const Component = Config.get(['jsExt', 'form', 'InputRow'])
+  const Component = config.InputRow || Config.get(['jsExt', 'form', 'InputRow'])
   const Input = component || inputs[type] || FakeInput
 
   return <Component {...props} Input={Input} hasLabel={hasLabel()} />
