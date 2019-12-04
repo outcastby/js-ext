@@ -1,6 +1,6 @@
 {
   "name": "@outcast.by/js-ext",
-  "version": "0.0.44",
+  "version": "0.0.45",
   "description": "",
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",
