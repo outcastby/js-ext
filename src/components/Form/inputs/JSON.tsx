@@ -1,9 +1,15 @@
 import React from 'react'
 import _ from 'lodash'
 import { InputComponentProps } from '../interfaces'
+import FakeInput from './FakeInput'
 
 const JSON: React.FC<InputComponentProps> = (props) => {
-  const { onChange, value, config, field: { name, defaultValue, type } } = props
+  const {
+    onChange,
+    value,
+    config,
+    field: { name, defaultValue, type },
+  } = props
 
   const handleChange = (v: any): void => {
     // eslint-disable-next-line prettier/prettier
@@ -17,7 +23,7 @@ const JSON: React.FC<InputComponentProps> = (props) => {
     return _.omit(value || defaultValue, ['__uuid'])
   }
 
-  const Component = config.inputs[type]
+  const Component = config.inputs[type] || FakeInput
 
   return <Component {...props} value={getValue()} onChange={handleChange} />
 }

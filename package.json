@@ -1,6 +1,6 @@
 {
   "name": "@outcast.by/js-ext",
-  "version": "0.0.35",
+  "version": "0.0.36",
   "description": "",
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",
@@ -48,10 +48,16 @@
       "git add"
     ]
   },
+  "devDependencies": {
+    "@types/react": "^16.9.11",
+    "react": "^16.11.0"
+  },
+  "peerDependencies": {
+    "react": "16.x"
+  },
   "dependencies": {
     "@types/js-cookie": "^2.2.1",
     "@types/lodash": "^4.14.144",
-    "@types/react": "^16.9.11",
     "@types/react-router-dom": "^5.1.2",
     "@types/sjcl": "^1.0.28",
     "@types/uuid": "^3.4.6",
@@ -62,7 +68,6 @@
     "js-cookie": "^2.2.1",
     "prettier-eslint-cli": "^5.0.0",
     "query-string": "^6.9.0",
-    "react": "^16.11.0",
     "react-router-dom": "^5.1.2",
     "sjcl": "^1.0.8",
     "string": "^3.3.3",
