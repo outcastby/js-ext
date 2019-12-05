@@ -2,6 +2,15 @@ import Form from '../../src/utils/form'
 import { Field } from '../../src/components/Form/interfaces'
 
 describe('Form', function() {
+  test('isAvailable is not filled', (): void => {
+    const field: Field = {
+      name: 'name',
+      type: 'type',
+    }
+
+    expect(Form.isAvailable(field, { any: true }, 'edit')).toEqual(true)
+  })
+
   test('isAvailable (value is valid)', (): void => {
     const field: Field = {
       name: 'name',
