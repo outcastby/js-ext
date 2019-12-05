@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import Dictionary from '../interfaces/Dictionary'
-import * as React from "react";
+import * as React from 'react'
 import Route from './interfaces/Route'
 
 export interface RouteRequest {
@@ -8,7 +8,7 @@ export interface RouteRequest {
 }
 
 export interface ComponentHOC {
-    (settings: Dictionary<any>): React.FC
+  (settings: Dictionary<any>): React.FC
 }
 
 export interface CRUD {
@@ -26,12 +26,14 @@ const DEFAULT_ACTIONS = [
   { gql: 'show', component: 'Show', linkPostfix: ':id/show' },
 ]
 
-
 const resources = (views: Views, name: string, routes: RouteRequest[]): Route[] => {
-  const { custom, crud: { settings, components } } = views
+  const {
+    custom,
+    crud: { settings, components },
+  } = views
   const result: Route[] = []
 
-  DEFAULT_ACTIONS.forEach(el => {
+  DEFAULT_ACTIONS.forEach((el) => {
     if (_.get(settings, [name, 'gql', el.gql])) {
       result.push({
         requiredPermissions: [_.snakeCase(name), el.gql === 'show' ? 'view' : 'edit'],
@@ -53,7 +55,7 @@ const resources = (views: Views, name: string, routes: RouteRequest[]): Route[] 
 
   // Custom actions
   if (routes) {
-    routes.forEach(route => {
+    routes.forEach((route) => {
       const buttonSettings = (settings[name].headerButtons || []).find((b: any) => b.routeAction === route.routeAction)
 
       result.push({

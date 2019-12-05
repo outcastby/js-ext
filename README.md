@@ -52,6 +52,63 @@ const routes = [
 | requiredPermissions | string[]      | `['cdn_servers', 'edit']` | The list can be used inside `isPermittedRoute` function in order to filter not permitted routes                                                                   |
 | redirect            | boolean       | `true`                    | When true, `<Redirect />` will be rendered. Works together with `pathTo`                                                                                          |
 
+## Form
+
+### Configure
+
+1. Fill Config
+
+    ```javascript
+    // jsExt.js config
+    
+    import Form from 'youselfComponents/Form'
+    ...
+
+    export default {
+      form: {
+        Form,
+        InputList,
+        InputRow,
+        hasPermissions,
+        inputs: {
+          select: Select,
+          text: Text,
+          integer: Text,
+          float: Text,
+          password: Text,
+          json: JSON,
+          smartJSON: SmartJSON,
+          checkbox: Checkbox,
+          datePicker: DatePicker,
+          file: File,
+        },
+      },
+    }
+    
+    // or using `@outcast.by/mui-components`
+    import { FormComponents } from '@outcast.by/mui-components'
+    
+    export default {
+      form: FormComponents,
+    }
+    ```
+
+2. Or pass config to the prop field `config`
+
+    ```jsx
+    <Form config={FormComponents} />
+    ```
+
+### hasPermission
+Sometimes we have to hide some input fields based on user permissions
+
+Form also provides this ability. We have to add yourself implementation 
+```javascript
+export default {
+  form: { ...FormComponents, hasPermission: hasPermission },
+}
+```
+
 ## Config
 
 Allows to create common config object
@@ -170,7 +227,7 @@ export default {
     axios,
     url: `${process.env.REACT_APP_SERVER_URL}/public`,
     options: { withCredentials: true },
-  }
+  },
 }
 ```
 
@@ -279,12 +336,17 @@ export default function BaseModal({ current }) {
 
 `current` - list of <Current> objects.
 Example:
+
 ```javascript
-[{name: 'Profile', params: {title: 'My Profile'}}, {name: 'Error', params: {title: 'Error!'}}]
+;[
+  { name: 'Profile', params: { title: 'My Profile' } },
+  { name: 'Error', params: { title: 'Error!' } },
+]
 ```
 
 `modals` - object where key is modal name, value is modal component
 Example:
+
 ```javascript
 {
   Profile: ProfileModal,

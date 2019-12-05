@@ -2,7 +2,7 @@ import _ from 'lodash'
 import fp from './fp'
 import Config from '../config'
 
-const DETAULT_NAMESPACE = 'dashCache'
+const DEFAULT_NAMESPACE = 'dashCache'
 
 // ToDo (mikhail): change to FP
 class LocalStorage {
@@ -15,7 +15,7 @@ class LocalStorage {
     if (!Array.isArray(path)) {
       path = path.split('.')
     }
-    this.values = JSON.parse(localStorage.getItem(Config.get(['jsExt', 'namespace'], DETAULT_NAMESPACE)) || '')
+    this.values = JSON.parse(localStorage.getItem(Config.get(['jsExt', 'namespace'], DEFAULT_NAMESPACE)) || '')
     return fp.getIn(this.values, path)
   }
 
@@ -25,11 +25,11 @@ class LocalStorage {
     }
     this.values = fp.setIn(this.values, path, value)
     this.values = _.mergeWith(
-      JSON.parse(localStorage.getItem(Config.get(['jsExt', 'namespace'], DETAULT_NAMESPACE)) || '') || {},
+      JSON.parse(localStorage.getItem(Config.get(['jsExt', 'namespace'], DEFAULT_NAMESPACE)) || '') || {},
       this.values,
       (oldVal, newVal) => newVal
     )
-    localStorage.setItem(Config.get(['jsExt', 'namespace'], DETAULT_NAMESPACE), JSON.stringify(this.values))
+    localStorage.setItem(Config.get(['jsExt', 'namespace'], DEFAULT_NAMESPACE), JSON.stringify(this.values))
   }
 }
 
