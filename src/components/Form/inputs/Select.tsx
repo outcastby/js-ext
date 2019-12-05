@@ -1,31 +1,26 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import _ from 'lodash'
 import { InputComponentProps } from '../interfaces'
 import { Option } from '../interfaces/Field'
 import FakeInput from './FakeInput'
 
-const Select: React.FC<InputComponentProps> = (props) => {
-  const {
-    onChange,
-    config,
-    value,
-    field: { name, multiple, allowEmpty },
-    field,
-  } = props
-
-  useEffect(() => {
-    if (typeof field.values == 'function') {
-      field.values().then((opts: (Option | string)[]) => {
-        const options = normalizeOptions(opts)
-        setOptions(options)
-        forceChange(options[0])
+class Select extends React.Component<InputComponentProps, { options: Option[] }> {
+  constructor(props: InputComponentProps) {
+    super(props)
+    this.state = {
+      options: this.normalizeOptions(props.field.values || []),
+    }
+    if (typeof props.field.values == 'function') {
+      props.field.values().then((opts: (Option | string)[]) => {
+        const options = this.normalizeOptions(opts)
+        this.setState({ options })
+        this.forceChange(options[0])
       })
     } else {
-      forceChange(options[0])
+      this.forceChange(this.state.options[0])
     }
-  }, [])
-
-  const normalizeOptions = (options: (Option | string)[] | (() => Promise<any>)): Option[] => {
+  }
+  normalizeOptions = (options: (Option | string)[] | (() => Promise<any>)): Option[] => {
     if (typeof options === 'function') return []
     if (!options) return []
 
@@ -39,9 +34,12 @@ const Select: React.FC<InputComponentProps> = (props) => {
     )
   }
 
-  const [options, setOptions] = useState(normalizeOptions(field.values || []))
-
-  const forceChange = (firstValue: undefined | Option): void => {
+  forceChange = (firstValue: undefined | Option): void => {
+    const {
+      onChange,
+      value,
+      field: { name, multiple, allowEmpty },
+    } = this.props
     if (allowEmpty) return
     if (multiple && !value) return onChange({ target: { name, value: [] } })
     if (multiple && value && value.every((v: any) => _.isObject(v))) {
@@ -54,7 +52,8 @@ const Select: React.FC<InputComponentProps> = (props) => {
     }
   }
 
-  const getValue = (): any => {
+  getValue = (): any => {
+    const { value } = this.props
     if (_.isArray(value) && value.every((v) => _.isObject(v))) {
       return value.map((v) => v.id)
     }
@@ -65,9 +64,11 @@ const Select: React.FC<InputComponentProps> = (props) => {
     return value
   }
 
-  const Component = config.inputs[props.field.type] || FakeInput
+  render(): any {
+    const Component = this.props.config.inputs[this.props.field.type] || FakeInput
 
-  return <Component {...props} value={getValue()} options={options} />
+    return <Component {...this.props} value={this.getValue()} options={this.state.options} />
+  }
 }
 
 export default Select

@@ -1,23 +1,22 @@
-import React, { useState } from 'react'
+import React from 'react'
 import _ from 'lodash'
 import { InputComponentProps, Field } from '../interfaces'
 import FakeInput from './FakeInput'
 import Form from 'utils/form'
+import InputRow from '../InputRow'
 
-const SmartJSON: React.FC<InputComponentProps> = (props) => {
-  const {
-    value,
-    actionType,
-    field: { fields = [], name, type },
-    field,
-    config,
-  } = props
+class SmartJSON extends React.Component<InputComponentProps, { activeField: number }> {
+  state = {
+    activeField: 0,
+  }
 
-  const fieldName: string[] = _.isArray(name) ? name : [name]
-
-  const [activeField, setActiveField] = useState(0)
-
-  const getFields = (): Field[] => {
+  getFields = (): Field[] => {
+    const {
+      field: { fields = [], name },
+      value,
+      actionType,
+    } = this.props
+    const fieldName: string[] = _.isArray(name) ? name : [name]
     return fields.reduce((result: Field[], f: Field) => {
       if (Form.isAvailable(f, value, actionType)) {
         return [...result, { ...f, name: _.flatten([...fieldName, f.name]) }]
@@ -26,16 +25,29 @@ const SmartJSON: React.FC<InputComponentProps> = (props) => {
     }, [])
   }
 
-  const Component = config.inputs[props.field.type] || FakeInput
+  renderRow = (field: Field, extra = {}): any => {
+    const fieldValue = _.isArray(field.name) ? _.get(this.props.value, _.last(field.name) as string) : field.name
 
-  return (
-    <Component
-      {...props}
-      field={{ ...field, fields: getFields() }}
-      activeField={activeField}
-      setActiveField={setActiveField}
-    />
-  )
+    return <InputRow {...this.props} field={field} value={fieldValue} {...extra} />
+  }
+
+  render(): any {
+    const {
+      config,
+      field,
+      field: { type },
+    } = this.props
+    const Component = config.inputs[type] || FakeInput
+    return (
+      <Component
+        {...this.props}
+        field={{ ...field, fields: this.getFields() }}
+        activeField={this.state.activeField}
+        setActiveField={(activeField: number) => this.setState({ activeField })}
+        renderRow={this.renderRow}
+      />
+    )
+  }
 }
 
 export default SmartJSON

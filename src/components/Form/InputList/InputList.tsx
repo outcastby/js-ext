@@ -1,12 +1,16 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import v4 from 'uuid/v4'
-import Dictionary from 'interfaces/Dictionary'
 import { Field, Event, Config } from '../interfaces'
 import _ from 'lodash'
+import InputRow from '../InputRow'
 
 interface Props {
+  actionType: 'edit' | 'new'
+  success: boolean
+  error: boolean
   config: Config
   values: Value[]
+  helpText: string
   layout: 'horizontal' | 'vertical'
   name?: string | string[]
   onChange: (event: Event) => void
@@ -18,39 +22,61 @@ interface Value {
   __uuid: string
 }
 
-const InputList: React.FC<Props> = ({ layout, values, name, onChange, field, config }) => {
-  useEffect(() => {
-    // TODO (atanych): draw up the way ho to avoid the timer. The timer reason: we can not change state during setup components
-    setTimeout(() => {
-      handleChange(values ? values.map((v) => ({ ...v, __uuid: v4() })) : [])
-    }, 200)
-  }, [])
-
-  const add = (): void => handleChange([{ __uuid: v4() }, ...values])
-
-  const remove = ({ __uuid }: Value): void => handleChange(values.filter((v) => v.__uuid !== __uuid))
-
-  const handleChange = (value: Value[]): void => {
-    onChange({ target: { name: getFullName().join(','), value } })
+class InputList extends React.Component<Props, {}> {
+  constructor(props: Props) {
+    super(props)
+    this.handleChange(props.values ? props.values.map((v) => ({ ...v, __uuid: v4() })) : [])
   }
 
-  const getFullName = (): string[] => {
-    const fullName = name ? [...name, field.name] : [field.name]
+  add = (): void => this.handleChange([{ __uuid: v4() }, ...this.props.values])
+
+  remove = ({ __uuid }: Value): void => this.handleChange(this.props.values.filter((v) => v.__uuid !== __uuid))
+
+  handleChange = (value: Value[]): void => {
+    this.props.onChange({ target: { name: this.getFullName().join(','), value } })
+  }
+
+  getFullName = (): string[] => {
+    const fullName = this.props.name ? [...this.props.name, this.props.field.name] : [this.props.field.name]
     return _.flatten(fullName)
   }
 
-  return (
-    <config.InputList
-      layout={layout}
-      field={{ ...field, type: _.trim(field.type, '[]') }}
-      hasLabel={!!field.label}
-      values={values || []}
-      name={getFullName()}
-      onChange={onChange}
-      onAdd={add}
-      onRemove={remove}
-    />
-  )
+  hasLabel = (): boolean => !!this.props.field.label
+
+  renderRow = (field: Field, index: number, extra = {}): any => {
+    return (
+      <InputRow
+        key={index}
+        {...this.props}
+        field={{
+          ...field,
+          name: [...this.getFullName(), index.toString()],
+          label: this.hasLabel() ? undefined : field.label,
+        }}
+        grid={{ input: 9, right: 0, label: 3 }}
+        value={this.props.values[index]}
+        {...extra}
+      />
+    )
+  }
+
+  render() {
+    const { layout, values, onChange, field, config } = this.props
+
+    return (
+      <config.InputList
+        layout={layout}
+        renderRow={this.renderRow}
+        field={{ ...field, type: _.trim(field.type, '[]') }}
+        hasLabel={this.hasLabel()}
+        values={values || []}
+        name={this.getFullName()}
+        onChange={onChange}
+        onAdd={this.add}
+        onRemove={this.remove}
+      />
+    )
+  }
 }
 
 export default InputList

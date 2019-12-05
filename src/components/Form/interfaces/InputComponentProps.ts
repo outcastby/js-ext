@@ -8,5 +8,8 @@ export default interface InputComponentProps {
   name?: string | string[]
   onChange: (event: Event) => void
   field: Field
+  success: boolean
+  error: boolean
+  helpText: string
   actionType: 'edit' | 'new'
 }

@@ -23,14 +23,12 @@ const InputRow: React.FC<Props> = (props) => {
   const {
     field: { type = 'text', component, label, requiredPermissions },
     field,
-    layout,
-    onChange,
     value,
     config,
   } = props
 
   if (type.includes('[]')) {
-    return <InputList layout={layout} onChange={onChange} values={value} field={field} config={config} />
+    return <InputList {...props} values={value} field={field} />
   }
 
   const hasLabel = (): boolean => {
@@ -49,7 +47,6 @@ const InputRow: React.FC<Props> = (props) => {
     return null
 
   const Input = component || inputs[type] || FakeInput
-
   return <config.InputRow {...props} Input={Input} hasLabel={hasLabel()} />
 }
 

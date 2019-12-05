@@ -7,6 +7,7 @@ import FormUtils from 'utils/form'
 import { Event, Settings, Config as IConfig } from './interfaces'
 import Dictionary from '../../interfaces/Dictionary'
 import Config from '../../config'
+import InputRow from './InputRow'
 
 const STRINGIFIED_TYPES = ['smartJSON', 'json']
 
@@ -102,17 +103,37 @@ class Form extends React.Component<Props, { errors?: Dictionary<any> }> {
   }
 
   render(): any {
-    const Component = this.props.config?.Form || Config.get(['jsExt', 'form', 'Form'])
+    const Component = this.props.config?.Form || Config.get(['jsExt', 'form', 'Form']) // eslint-disable-line
+    const errors = this.state.errors || {}
+    const settings = { ...this.props.settings, layout: this.props.settings.layout || 'horizontal' }
     return (
       <Component
-        config={this.props.config || Config.get(['jsExt', 'form'])}
         {...this.props}
-        errors={this.state.errors || {}}
+        errors={errors}
         onSubmit={this.onSubmit}
         state={this.state}
-        settings={{ ...this.props.settings, layout: this.props.settings.layout || 'horizontal' }}
+        settings={settings}
         onChange={this.onChange}
-      />
+      >
+        {this.props.settings.fields.map((field) => {
+          const value = getIn(this.state, field.path || [field.name])
+          return (
+            <InputRow
+              actionType={this.props.type}
+              config={this.props.config || Config.get(['jsExt', 'form'])}
+              error={!!errors[field.name as string]}
+              field={field}
+              helpText={errors[field.name as string] ? errors[field.name as string][0] : ''}
+              id={this.props.entity.id}
+              key={field.name.toString()}
+              layout={settings.layout}
+              onChange={this.onChange}
+              success={false}
+              value={value === 0 ? 0 : value || ''}
+            />
+          )
+        })}
+      </Component>
     )
   }
 }
