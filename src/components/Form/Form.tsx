@@ -74,7 +74,6 @@ class Form extends React.Component<Props, { errors?: Dictionary<any>; settings: 
 
   shouldBeStringified = (name: string): boolean => {
     const field = this.state.settings.fields.find((field) => field.name === name)
-    // eslint-disable-next-line prettier/prettier
     if (!field?.type) return false
     if (field.type.includes('[]')) return true
     return STRINGIFIED_TYPES.includes(field.type)

@@ -12,7 +12,6 @@ const JSON: React.FC<InputComponentProps> = (props) => {
   } = props
 
   const handleChange = (v: any): void => {
-    // eslint-disable-next-line prettier/prettier
     onChange({ target: { value: isArray() ? v : { ...v, __uuid: value?.__uuid }, name } })
   }
 

@@ -1,13 +1,14 @@
 import SetEntity from '../../../src/core/form/SetEntity'
 import fields from './fields'
 import uuid from 'uuid/v4'
+import { mocked } from 'ts-jest/utils'
+
 jest.mock('uuid/v4')
 
 describe('run', (): void => {
   test('with entity', (): void => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-    // @ts-ignore
-    uuid.mockImplementation(() => 'test-uuid')
+    mocked(uuid).mockImplementation((): string => 'test-uuid')
+
     const entity = {
       name: 'Test',
       challengeType: 'weekly',
@@ -38,7 +39,7 @@ describe('run', (): void => {
       challengeType: undefined,
       rewards: [],
       data: {
-        static: undefined,
+        static: {},
         dynamic: [],
       },
     })

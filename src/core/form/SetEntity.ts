@@ -4,28 +4,30 @@ import { getIn, setIn } from '../../utils/fp'
 import v4 from 'uuid/v4'
 import _ from 'lodash'
 
-const setEntity = (fields: Field[], entity: Dictionary<any> = {}, parentPath: any = []): Dictionary<any> => {
-  return fields.reduce((result, field) => {
-    const { name, path } = field
-    let value = getIn(entity, [...parentPath, ...(path || [name])])
+const SetEntity = {
+  run: (fields: Field[], entity: Dictionary<any> = {}, parentPath: any = []): Dictionary<any> => {
+    return fields.reduce((result, field) => {
+      const { name, path } = field
+      let value = getIn(entity, [...parentPath, ...(path || [name])])
 
-    value =
-      field.fields && !field.type?.includes('[]')
-        ? setEntity(field.fields, entity, [...parentPath, ...(path || [name])])
-        : getValue(field, value)
+      value =
+        field.fields && !field.type?.includes('[]')
+          ? SetEntity.run(field.fields, entity, [...parentPath, ...(path || [name])])
+          : getValue(field, value)
 
-    return setIn(result, path || [name], value)
-  }, {} as Dictionary<any>)
+      return setIn(result, path || [name], value)
+    }, {} as Dictionary<any>)
+  },
 }
 
 const getValue = (field: Field, value: any): any => (value ? normalizeValue(field, value) : getDefaultValue(field))
 
-const getDefaultValue = ({ allowEmpty, multiple, options, type }: Field): any => {
+const getDefaultValue = ({ allowEmpty, multiple, options, type, defaultValue }: Field): any => {
+  if (defaultValue) return defaultValue
   if (type?.includes('[]')) return []
   if (allowEmpty) return
 
   if (_.isArray(options) && _.isObject(options[0])) {
-    // eslint-disable-next-line prettier/prettier
     return multiple ? [] : options[0]?.value
   }
 }
@@ -42,10 +44,10 @@ const normalizeValue = ({ fields, type, multiple }: Field, value: any): any => {
 
 const normalizedJSONList = (fields: Field[] | undefined, values: any[]): any[] => {
   if (fields) {
-    return values.map((v: {}) => ({ ...setEntity(fields, v), __uuid: v4() }))
+    return values.map((v: {}) => ({ ...SetEntity.run(fields, v), __uuid: v4() }))
   } else {
     return values.map((v: {}) => ({ ...v, __uuid: v4() }))
   }
 }
 
-export default { run: setEntity }
+export default SetEntity
