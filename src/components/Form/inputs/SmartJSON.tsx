@@ -43,7 +43,7 @@ class SmartJSON extends React.Component<InputComponentProps, { activeField: numb
         {...this.props}
         field={{ ...field, fields: this.getFields() }}
         activeField={this.state.activeField}
-        setActiveField={(activeField: number) => this.setState({ activeField })}
+        setActiveField={(activeField: number): void => this.setState({ activeField })}
         renderRow={this.renderRow}
       />
     )

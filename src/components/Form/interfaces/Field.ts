@@ -11,7 +11,7 @@ export default interface Field {
   name: string | string[]
   path?: string[]
   type: string
-  values?: (Option | string)[] | (() => Promise<any>)
+  options?: (Option | string)[] | (() => Promise<any>)
   multiple?: boolean
   allowEmpty?: boolean
   collapsed?: boolean

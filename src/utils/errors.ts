@@ -2,7 +2,6 @@ import _ from 'lodash'
 import { Field } from '../components/Form/interfaces'
 import Dictionary from '../interfaces/Dictionary'
 
-// eslint-disable-next-line prettier/prettier
 export const isGraphQLError = (error: any): boolean => error?.constructor?.name === 'GraphQLError'
 
 export const normalize = (serverErrors: any[], fields: Field[]): any => {
