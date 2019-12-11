@@ -1,8 +1,9 @@
 import _ from 'lodash'
-import { Field, Event, Context } from '../components/Form/interfaces'
+import { Field, Event } from '../components/Form/interfaces'
 import { Dictionary } from '../index'
 import handlers from '../components/Form/handlers'
 import { setIn } from './fp'
+import Form from '../components/Form'
 
 const isAvailable = ({ availableIf }: Field, value: Dictionary<any>, actionType: 'edit' | 'new'): boolean => {
   if (!availableIf) return true
@@ -25,7 +26,7 @@ const getFieldByName = ([name, ...rest]: string[], fields: Field[]): Field => {
   return field
 }
 
-const changeHandler = (event: Event, fields: Field[], context: Context): void => {
+const changeHandler = (event: Event, fields: Field[], context: Form): void => {
   const name: string[] = _.isArray(event.target.name) ? event.target.name : event.target.name.split(',')
   const field = getFieldByName(name, fields)
   const handler = handlers[field.type] || handlers.text

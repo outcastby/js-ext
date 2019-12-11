@@ -3,6 +3,7 @@ import v4 from 'uuid/v4'
 import { Field, Event, Config } from '../interfaces'
 import _ from 'lodash'
 import InputRow from '../InputRow'
+import SetEntity from '../../../core/form/SetEntity'
 
 interface Props {
   actionType: 'edit' | 'new'
@@ -22,13 +23,15 @@ interface Value {
   __uuid: string
 }
 
+// TODO (mikhail): use FP component
 class InputList extends React.Component<Props, {}> {
-  constructor(props: Props) {
-    super(props)
-    this.handleChange(props.values ? props.values.map((v) => ({ ...v, __uuid: v4() })) : [])
+  add = (): void => {
+    const {
+      field: { fields },
+    } = this.props
+    const entity = fields ? SetEntity.run(fields) : {}
+    this.handleChange([{ __uuid: v4(), ...entity }, ...this.props.values])
   }
-
-  add = (): void => this.handleChange([{ __uuid: v4() }, ...this.props.values])
 
   remove = ({ __uuid }: Value): void => this.handleChange(this.props.values.filter((v) => v.__uuid !== __uuid))
 
@@ -60,7 +63,7 @@ class InputList extends React.Component<Props, {}> {
     )
   }
 
-  render() {
+  render(): any {
     const { layout, values, onChange, field, config } = this.props
 
     return (

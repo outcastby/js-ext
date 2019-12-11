@@ -1,19 +1,24 @@
 import _ from 'lodash'
 import { setIn } from '../../utils/fp'
-import { Field, Event, Context } from './interfaces'
+import { Field, Event } from './interfaces'
 import Dictionary from 'interfaces/Dictionary'
+import Form from './Form'
 
-export const baseHandler = (context: Context, field: Field, { target }: Event): void => {
-  context.setState((state: Dictionary<any>) => setIn(state, field.path || [field.name], target.value))
+export const baseHandler = (context: Form, field: Field, { target }: Event): void => {
+  context.setState((state: Dictionary<any>) => setIn(state, ['entity', ...(field.path || [field.name])], target.value))
 }
 
-export const integerHandler = (context: Context, field: Field, { target }: Event): void => {
+export const integerHandler = (context: Form, field: Field, { target }: Event): void => {
   context.setState((state: Dictionary<any>) =>
-    setIn(state, field.path || [field.name], /(^-$)|(-\D+)/.test(target.value) ? '-' : parseInt(target.value))
+    setIn(
+      state,
+      ['entity', field.path || [field.name]],
+      /(^-$)|(-\D+)/.test(target.value) ? '-' : parseInt(target.value)
+    )
   )
 }
 
-export const floatHandler = (context: Context, field: Field, { target }: Event): void => {
+export const floatHandler = (context: Form, field: Field, { target }: Event): void => {
   let { value } = target
   // If the value is "-" or the last character of the value is "0", then do nothing, because parsing will remove these characters
   if (/(^-$)|(0$)/.test(value)) {
@@ -28,14 +33,14 @@ export const floatHandler = (context: Context, field: Field, { target }: Event):
     value = parseFloat(value)
   }
 
-  context.setState((state: Dictionary<any>) => setIn(state, field.path || [field.name], value))
+  context.setState((state: Dictionary<any>) => setIn(state, ['entity', field.path || [field.name]], value))
 }
 
-export const checkboxHandler = (context: Context, field: Field, { target }: Event): void => {
-  context.setState((state: Dictionary<any>) => setIn(state, field.path || [field.name], target.checked))
+export const checkboxHandler = (context: Form, field: Field, { target }: Event): void => {
+  context.setState((state: Dictionary<any>) => setIn(state, ['entity', field.path || [field.name]], target.checked))
 }
 
-export const fileHandler = (context: Context, field: Field, { target }: Event): void => {
+export const fileHandler = (context: Form, field: Field, { target }: Event): void => {
   context.setState((state: Dictionary<any>) => setIn(state, field.path || [field.name], _.first(target.files)))
 }
 

@@ -1,17 +1,19 @@
 import React from 'react'
 import queryString from 'query-string'
 import _ from 'lodash'
-import { getIn, setIn } from 'utils/fp'
+import { getIn } from 'utils/fp'
 import { normalize, isGraphQLError } from 'utils/errors'
 import FormUtils from 'utils/form'
 import { Event, Settings, Config as IConfig } from './interfaces'
 import Dictionary from '../../interfaces/Dictionary'
 import Config from '../../config'
 import InputRow from './InputRow'
+import SetEntity from '../../core/form/SetEntity'
+import NormalizeFields from '../../core/form/NormalizeFields'
 
 const STRINGIFIED_TYPES = ['smartJSON', 'json']
 
-interface Props {
+export interface Props {
   config?: IConfig
   settings: Settings
   entity: Dictionary<any>
@@ -24,16 +26,24 @@ interface Props {
 }
 
 // TODO (atanych): use FP component after reducing multiple updates of state
-class Form extends React.Component<Props, { errors?: Dictionary<any> }> {
+class Form extends React.Component<Props, { errors?: Dictionary<any>; settings: Settings; entity: Dictionary<any> }> {
   constructor(props: Props) {
     super(props)
-    this.state = props.settings.fields.reduce((result, { name, path }) => {
-      const value = getIn(props.entity, path || [name])
-      return setIn(result, path || [name], value)
-    }, {})
+
+    this.state = { settings: { ...props.settings, fields: [] }, entity: {} }
   }
 
-  onChange = (event: Event): void => FormUtils.changeHandler(event, this.props.settings.fields, this)
+  componentDidMount(): void {
+    NormalizeFields.run(this.props.settings.fields).then((fields) => {
+      const settings = { ...this.props.settings, fields }
+
+      const entity = SetEntity.run(this.props.settings.fields, this.props.entity)
+
+      this.setState({ settings, entity })
+    })
+  }
+
+  onChange = (event: Event): void => FormUtils.changeHandler(event, this.state.settings.fields, this)
 
   // TODO (atanych): sort out and simplify
   gatherVariables(vars: Dictionary<any>): Dictionary<any> {
@@ -63,7 +73,7 @@ class Form extends React.Component<Props, { errors?: Dictionary<any> }> {
   }
 
   shouldBeStringified = (name: string): boolean => {
-    const field = this.props.settings.fields.find((field) => field.name === name)
+    const field = this.state.settings.fields.find((field) => field.name === name)
     // eslint-disable-next-line prettier/prettier
     if (!field?.type) return false
     if (field.type.includes('[]')) return true
@@ -87,12 +97,12 @@ class Form extends React.Component<Props, { errors?: Dictionary<any> }> {
 
   onSubmit = (): void => {
     const { onSubmit, gatherVariables, onSuccess } = this.props
-    let variables = _.reduce(this.state, (res, branch, key) => ({ ...res, [key]: this.removeUUID(branch) }), {})
+    let variables = _.reduce(this.state.entity, (res, branch, key) => ({ ...res, [key]: this.removeUUID(branch) }), {})
     variables = gatherVariables ? gatherVariables(variables) : this.gatherVariables(variables)
     onSubmit({ variables })
       .catch((error: any) => {
         if (isGraphQLError(error) && error.message.length > 0) {
-          this.setState({ errors: normalize(error.message, this.props.settings.fields) })
+          this.setState({ errors: normalize(error.message, this.state.settings.fields) })
         }
       })
       .then((res: any) => {
@@ -105,7 +115,8 @@ class Form extends React.Component<Props, { errors?: Dictionary<any> }> {
   render(): any {
     const Component = this.props.config?.Form || Config.get(['jsExt', 'form', 'Form']) // eslint-disable-line
     const errors = this.state.errors || {}
-    const settings = { ...this.props.settings, layout: this.props.settings.layout || 'horizontal' }
+    const settings = { ...this.state.settings, layout: this.state.settings.layout || 'horizontal' }
+
     return (
       <Component
         {...this.props}
@@ -115,8 +126,8 @@ class Form extends React.Component<Props, { errors?: Dictionary<any> }> {
         settings={settings}
         onChange={this.onChange}
       >
-        {this.props.settings.fields.map((field) => {
-          const value = getIn(this.state, field.path || [field.name])
+        {this.state.settings.fields.map((field) => {
+          const value = getIn(this.state.entity, field.path || [field.name])
           return (
             <InputRow
               actionType={this.props.type}
