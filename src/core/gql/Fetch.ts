@@ -1,6 +1,5 @@
 import axios, { AxiosStatic } from 'axios'
 import { ASTNode, print } from 'graphql'
-// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 // @ts-ignore
 import { extractFiles } from 'extract-files'
 import Dictionary from '../../interfaces/Dictionary'

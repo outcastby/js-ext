@@ -41,7 +41,9 @@ export const checkboxHandler = (context: Form, field: Field, { target }: Event):
 }
 
 export const fileHandler = (context: Form, field: Field, { target }: Event): void => {
-  context.setState((state: Dictionary<any>) => setIn(state, field.path || [field.name], _.first(target.files)))
+  context.setState((state: Dictionary<any>) =>
+    setIn(state, ['entity', field.path || [field.name]], _.first(target.files))
+  )
 }
 
 const handlers: Dictionary<any> = {

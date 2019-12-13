@@ -18,6 +18,7 @@ module.exports = {
   rules: {
     '@typescript-eslint/no-explicit-any': 0,
     '@typescript-eslint/no-use-before-define': 0,
+    '@typescript-eslint/ban-ts-ignore': 0,
     '@typescript-eslint/interface-name-prefix': [1, { "prefixWithI": "never" }],
     "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
     // "react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
