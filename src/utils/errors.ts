@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { Field } from '../components/Form/interfaces'
 import Dictionary from '../interfaces/Dictionary'
 
-export const isGraphQLError = (error: any): boolean => error?.constructor?.name === 'GraphQLError'
+export const isGraphQLError = (error: any): boolean => error?.stack?.includes('GraphQLError')
 
 export const normalize = (serverErrors: any[], fields: Field[]): any => {
   if (_.first(serverErrors).details) {
