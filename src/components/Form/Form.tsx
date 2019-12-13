@@ -1,5 +1,4 @@
 import React from 'react'
-import queryString from 'query-string'
 import _ from 'lodash'
 import { getIn } from 'utils/fp'
 import { normalize, isGraphQLError } from 'utils/errors'
@@ -10,6 +9,7 @@ import Config from '../../config'
 import InputRow from './InputRow'
 import SetEntity from '../../core/form/SetEntity'
 import NormalizeFields from '../../core/form/NormalizeFields'
+import GatherVariables from '../../core/form/GatherVariables'
 
 const STRINGIFIED_TYPES = ['smartJSON', 'json']
 
@@ -20,7 +20,7 @@ export interface Props {
   customButtons: (context: { onSubmit: () => void }) => React.FC<any>
   type: 'new' | 'edit'
   association: string
-  gatherVariables?: (vars: Dictionary<any>) => Dictionary<any>
+  amendVariables?: (vars: Dictionary<any>) => Dictionary<any>
   onSuccess?: () => Promise<any>
   onSubmit: (vars: Dictionary<any>) => Promise<any>
 }
@@ -37,40 +37,13 @@ class Form extends React.Component<Props, { errors?: Dictionary<any>; settings: 
     NormalizeFields.run(this.props.settings.fields).then((fields) => {
       const settings = { ...this.props.settings, fields }
 
-      const entity = SetEntity.run(this.props.settings.fields, this.props.entity)
+      const entity = SetEntity.run(settings.fields, this.props.entity)
 
       this.setState({ settings, entity })
     })
   }
 
   onChange = (event: Event): void => FormUtils.changeHandler(event, this.state.settings.fields, this)
-
-  // TODO (atanych): sort out and simplify
-  gatherVariables(vars: Dictionary<any>): Dictionary<any> {
-    const { entity, association } = this.props
-    const getParams = queryString.parse(window.location.search)
-    let normalizedEntity = _.omit(vars, 'errors')
-
-    normalizedEntity = _.reduce(
-      normalizedEntity,
-      (sum, value, key) => {
-        const formatValue = this.shouldBeStringified(key) ? JSON.stringify(value) : value
-        return { ...sum, [key]: formatValue }
-      },
-      {}
-    )
-
-    let variables: Dictionary<any> = {
-      id: entity.id,
-      entity: normalizedEntity,
-    }
-
-    const parentId = parseInt(getParams[`${association}_id`] as string)
-    if (parentId) {
-      variables = { ...variables, parentId }
-    }
-    return variables
-  }
 
   shouldBeStringified = (name: string): boolean => {
     const field = this.state.settings.fields.find((field) => field.name === name)
@@ -82,7 +55,7 @@ class Form extends React.Component<Props, { errors?: Dictionary<any>; settings: 
   removeUUID = (variables: any): Dictionary<any> => {
     if (_.isArray(variables)) {
       return variables.map((b) => {
-        return _.isObject(b) ? _.omit(b, ['__uuid']) : b
+        return this.removeUUID(_.isObject(b) ? _.omit(b, ['__uuid']) : b)
       })
     }
     if (variables instanceof File) {
@@ -95,9 +68,11 @@ class Form extends React.Component<Props, { errors?: Dictionary<any>; settings: 
   }
 
   onSubmit = (): void => {
-    const { onSubmit, gatherVariables, onSuccess } = this.props
+    const { onSubmit, amendVariables, onSuccess } = this.props
     let variables = _.reduce(this.state.entity, (res, branch, key) => ({ ...res, [key]: this.removeUUID(branch) }), {})
-    variables = gatherVariables ? gatherVariables(variables) : this.gatherVariables(variables)
+    variables = GatherVariables.run(variables, this)
+    variables = amendVariables ? amendVariables(variables) : variables
+
     onSubmit({ variables })
       .catch((error: any) => {
         if (isGraphQLError(error) && error.message.length > 0) {

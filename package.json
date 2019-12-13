@@ -1,6 +1,6 @@
 {
   "name": "@outcast.by/js-ext",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "",
   "main": "build/src/index.js",
   "types": "build/src/index.d.ts",
@@ -51,7 +51,6 @@
     "query-string": "^6.9.0",
     "react-router-dom": "^5.1.2",
     "sjcl": "^1.0.8",
-    "string": "^3.3.3",
     "uuid": "^3.3.3"
   },
   "exclude": [
