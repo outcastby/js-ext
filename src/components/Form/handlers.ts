@@ -12,7 +12,7 @@ export const integerHandler = (context: Form, field: Field, { target }: Event): 
   context.setState((state: Dictionary<any>) =>
     setIn(
       state,
-      ['entity', field.path || [field.name]],
+      ['entity', ...(field.path || [field.name])],
       /(^-$)|(-\D+)/.test(target.value) ? '-' : parseInt(target.value)
     )
   )
@@ -33,16 +33,18 @@ export const floatHandler = (context: Form, field: Field, { target }: Event): vo
     value = parseFloat(value)
   }
 
-  context.setState((state: Dictionary<any>) => setIn(state, ['entity', field.path || [field.name]], value))
+  context.setState((state: Dictionary<any>) => setIn(state, ['entity', ...(field.path || [field.name])], value))
 }
 
 export const checkboxHandler = (context: Form, field: Field, { target }: Event): void => {
-  context.setState((state: Dictionary<any>) => setIn(state, ['entity', field.path || [field.name]], target.checked))
+  context.setState((state: Dictionary<any>) =>
+    setIn(state, ['entity', ...(field.path || [field.name])], target.checked)
+  )
 }
 
 export const fileHandler = (context: Form, field: Field, { target }: Event): void => {
   context.setState((state: Dictionary<any>) =>
-    setIn(state, ['entity', field.path || [field.name]], _.first(target.files))
+    setIn(state, ['entity', ...(field.path || [field.name])], _.first(target.files))
   )
 }
 
