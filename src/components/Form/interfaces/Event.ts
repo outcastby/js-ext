@@ -1,4 +1,4 @@
-import Dictionary from 'interfaces/Dictionary'
+import Dictionary from '../../../interfaces/Dictionary'
 
 export default interface Event {
   target: Target

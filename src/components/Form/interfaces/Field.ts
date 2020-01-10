@@ -1,5 +1,5 @@
 import React from 'react'
-import Dictionary from 'interfaces/Dictionary'
+import Dictionary from '../../../interfaces/Dictionary'
 
 export interface Option {
   value: string
