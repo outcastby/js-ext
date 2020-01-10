@@ -6,8 +6,8 @@
   "types": "build/src/index.d.ts",
   "scripts": {
     "test": "jest",
-    "build": "ttsc",
-    "prepublish": "ttsc"
+    "build": "tsc",
+    "prepublish": "tsc"
   },
   "repository": {
     "type": "git",
@@ -73,7 +73,6 @@
     "react-dom": "^16.12.0",
     "ts-jest": "^24.1.0",
     "ts-transformer-imports": "^0.4.3",
-    "ttypescript": "^1.5.8",
     "typescript": "^3.7.3"
   }
 }
