@@ -1,13 +1,19 @@
 import _ from 'lodash'
 import Dictionary from '../interfaces/Dictionary'
 
-let config = {} as Dictionary<any>
+declare global {
+  interface Window {
+    jsExtConfig: Dictionary<any>
+  }
+}
 
-const set = (newConfig: Dictionary<any>): Dictionary<any> => (config = newConfig)
+window.jsExtConfig = window.jsExtConfig || {}
 
-const setIn = (path: string | string[], value: any): Dictionary<any> => _.set(config, path, value)
+const set = (newConfig: Dictionary<any>): Dictionary<any> => (window.jsExtConfig = newConfig)
 
-const get = (path: string | string[], defaultValue?: any): any => _.get(config, path, defaultValue)
+const setIn = (path: string | string[], value: any): Dictionary<any> => _.set(window.jsExtConfig, path, value)
+
+const get = (path: string | string[], defaultValue?: any): any => _.get(window.jsExtConfig, path, defaultValue)
 
 export default {
   set,
