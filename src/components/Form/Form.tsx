@@ -55,7 +55,7 @@ class Form extends React.Component<Props, { errors?: Dictionary<any>; settings: 
   removeUUID = (variables: any): Dictionary<any> => {
     if (_.isArray(variables)) {
       return variables.map((b) => {
-        return this.removeUUID(_.isObject(b) ? _.omit(b, ['__uuid']) : b)
+        return this.removeUUID(_.isPlainObject(b) ? _.omit(b, ['__uuid']) : b)
       })
     }
     if (variables instanceof File) {
