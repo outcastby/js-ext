@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import { setIn } from '../../utils/fp'
 import { Field, Event } from './interfaces'
-import Dictionary from 'interfaces/Dictionary'
+import Dictionary from '../../interfaces/Dictionary'
 import Form from './Form'
 
 export const baseHandler = (context: Form, field: Field, { target }: Event): void => {

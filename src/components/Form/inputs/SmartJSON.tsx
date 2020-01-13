@@ -2,7 +2,7 @@ import React from 'react'
 import _ from 'lodash'
 import { InputComponentProps, Field } from '../interfaces'
 import FakeInput from './FakeInput'
-import Form from 'utils/form'
+import Form from '../../../utils/form'
 import InputRow from '../InputRow'
 
 class SmartJSON extends React.Component<InputComponentProps, { activeField: number }> {
