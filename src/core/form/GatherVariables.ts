@@ -3,6 +3,14 @@ import queryString from 'query-string'
 import _ from 'lodash'
 import Form from '../../components/Form'
 
+const normalizeValue = (value: any, shouldBeStringified: boolean): any => {
+  if (shouldBeStringified) return JSON.stringify(value)
+
+  if (_.isArray(value) && _.every(value, (v) => _.has(v, 'value'))) return value.map((v) => v.value)
+
+  return value
+}
+
 export default {
   run: (vars: Dictionary<any>, context: Form): Dictionary<any> => {
     const { entity, association } = context.props
@@ -10,7 +18,7 @@ export default {
 
     const normalizedEntity = _.reduce(
       vars,
-      (sum, value, key) => ({ ...sum, [key]: context.shouldBeStringified(key) ? JSON.stringify(value) : value }),
+      (sum, value, key) => ({ ...sum, [key]: normalizeValue(value, context.shouldBeStringified(key)) }),
       {}
     )
 
