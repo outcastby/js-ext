@@ -32,8 +32,10 @@ const getDefaultValue = ({ allowEmpty, multiple, options, type, defaultValue }: 
   }
 }
 
-const normalizeValue = ({ fields, type, multiple }: Field, value: any): any => {
+const normalizeValue = ({ fields, type, multiple, async }: Field, value: any): any => {
   if (type?.includes('[]')) return normalizedJSONList(fields, value)
+
+  if (async) return value
 
   if (multiple && value?.every((v: any) => _.isObject(v))) {
     return value.map((v: { id: string | number }) => v.id)

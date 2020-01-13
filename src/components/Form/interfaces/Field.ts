@@ -20,4 +20,5 @@ export default interface Field {
   requiredPermissions?: string[]
   availableIf?: (value: Dictionary<any>, actionType: 'new' | 'edit') => boolean
   fields?: Field[]
+  async?: boolean
 }

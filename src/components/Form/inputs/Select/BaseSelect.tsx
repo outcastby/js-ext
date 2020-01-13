@@ -1,10 +1,10 @@
 import React from 'react'
 import _ from 'lodash'
-import { InputComponentProps } from '../interfaces'
-import FakeInput from './FakeInput'
+import { InputComponentProps } from '../../interfaces'
+import FakeInput from '../FakeInput'
 
 // TODO (mikhail): use FP component
-class Select extends React.Component<InputComponentProps, {}> {
+class BaseSelect extends React.Component<InputComponentProps, {}> {
   getValue = (): any => {
     const { value } = this.props
     if (_.isArray(value) && value.every((v) => _.isObject(v))) {
@@ -24,4 +24,4 @@ class Select extends React.Component<InputComponentProps, {}> {
   }
 }
 
-export default Select
+export default BaseSelect
