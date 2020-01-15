@@ -22,6 +22,7 @@ export interface Props {
   association: string
   amendVariables?: (vars: Dictionary<any>) => Dictionary<any>
   onSuccess?: () => Promise<any>
+  onChange: (entity: any) => Promise<any>
   onSubmit: (vars: Dictionary<any>) => Promise<any>
 }
 
@@ -43,7 +44,10 @@ class Form extends React.Component<Props, { errors?: Dictionary<any>; settings: 
     })
   }
 
-  onChange = (event: Event): void => FormUtils.changeHandler(event, this.state.settings.fields, this)
+  onChange = (event: Event): void => {
+    FormUtils.changeHandler(event, this.state.settings.fields, this)
+    this.props.onChange && this.props.onChange(this.state.entity)
+  }
 
   shouldBeStringified = (name: string): boolean => {
     const field = this.state.settings.fields.find((field) => field.name === name)
@@ -86,6 +90,11 @@ class Form extends React.Component<Props, { errors?: Dictionary<any>; settings: 
       })
   }
 
+  getValue(value: any): any {
+    if (value === 0 || value === false || value) return value
+    return ''
+  }
+
   render(): any {
     const Component = this.props.config?.Form || Config.get(['jsExt', 'form', 'Form']) // eslint-disable-line
     const errors = this.state.errors || {}
@@ -114,7 +123,7 @@ class Form extends React.Component<Props, { errors?: Dictionary<any>; settings: 
               layout={settings.layout}
               onChange={this.onChange}
               success={false}
-              value={value === 0 ? 0 : value || ''}
+              value={this.getValue(value)}
             />
           )
         })}

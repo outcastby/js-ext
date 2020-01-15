@@ -23,7 +23,7 @@ const SetEntity = {
 const getValue = (field: Field, value: any): any => (value ? normalizeValue(field, value) : getDefaultValue(field))
 
 const getDefaultValue = ({ allowEmpty, multiple, options, type, defaultValue }: Field): any => {
-  if (defaultValue) return defaultValue
+  if (defaultValue || defaultValue === false) return defaultValue
   if (type?.includes('[]')) return []
   if (allowEmpty) return
 

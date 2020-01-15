@@ -2,6 +2,7 @@ import Proxy from './Proxy'
 import SmartJSON from './SmartJSON'
 import Select from './Select'
 import JSON from './JSON'
+import Hidden from './Hidden'
 import Dictionary from '../../../interfaces/Dictionary'
 
 const inputs: Dictionary<any> = {
@@ -15,6 +16,7 @@ const inputs: Dictionary<any> = {
   select: Select,
   file: Proxy,
   password: Proxy,
+  hidden: Hidden,
 }
 
 export default inputs

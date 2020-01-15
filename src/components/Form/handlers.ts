@@ -58,6 +58,7 @@ const handlers: Dictionary<any> = {
   json: baseHandler,
   file: fileHandler,
   password: baseHandler,
+  hidden: baseHandler,
 }
 
 export default handlers
