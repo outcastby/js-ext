@@ -57,6 +57,7 @@ const handlers: Dictionary<any> = {
   float: floatHandler,
   json: baseHandler,
   file: fileHandler,
+  image: fileHandler,
   password: baseHandler,
   hidden: baseHandler,
 }

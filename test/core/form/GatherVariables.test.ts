@@ -20,6 +20,7 @@ test('run', (): void => {
       association: 'user',
     },
     shouldBeStringified: (key: string): boolean => key === 'json',
+    getField: () => ({ name: 'text', type: 'text' }),
   }
   expect(GatherVariables.run(variables, context)).toEqual({
     id: 1,

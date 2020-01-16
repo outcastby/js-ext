@@ -10,6 +10,7 @@ import InputRow from './InputRow'
 import SetEntity from '../../core/form/SetEntity'
 import NormalizeFields from '../../core/form/NormalizeFields'
 import GatherVariables from '../../core/form/GatherVariables'
+import Field from './interfaces/Field'
 
 const STRINGIFIED_TYPES = ['smartJSON', 'json']
 
@@ -49,8 +50,10 @@ class Form extends React.Component<Props, { errors?: Dictionary<any>; settings: 
     this.props.onChange && this.props.onChange(this.state.entity)
   }
 
+  getField = (name: string): Field | undefined => this.state.settings.fields.find((field) => field.name === name)
+
   shouldBeStringified = (name: string): boolean => {
-    const field = this.state.settings.fields.find((field) => field.name === name)
+    const field = this.getField(name)
     if (!field?.type) return false
     if (field.type.includes('[]')) return true
     return STRINGIFIED_TYPES.includes(field.type)

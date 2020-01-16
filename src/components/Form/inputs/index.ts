@@ -15,6 +15,7 @@ const inputs: Dictionary<any> = {
   smartJSON: SmartJSON,
   select: Select,
   file: Proxy,
+  image: Proxy,
   password: Proxy,
   hidden: Hidden,
 }
