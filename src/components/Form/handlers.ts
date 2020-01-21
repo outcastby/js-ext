@@ -1,24 +1,13 @@
 import _ from 'lodash'
-import { setIn } from '../../utils/fp'
-import { Field, Event } from './interfaces'
+import { Target } from './interfaces/Event'
 import Dictionary from '../../interfaces/Dictionary'
-import Form from './Form'
 
-export const baseHandler = (context: Form, field: Field, { target }: Event): void => {
-  context.setState((state: Dictionary<any>) => setIn(state, ['entity', ...(field.path || [field.name])], target.value))
-}
+export const baseHandler = ({ value }: Target): any => value
 
-export const integerHandler = (context: Form, field: Field, { target }: Event): void => {
-  context.setState((state: Dictionary<any>) =>
-    setIn(
-      state,
-      ['entity', ...(field.path || [field.name])],
-      /(^-$)|(-\D+)/.test(target.value) ? '-' : parseInt(target.value)
-    )
-  )
-}
+export const integerHandler = ({ value }: Target): string | number =>
+  /(^-$)|(-\D+)/.test(value) ? '-' : parseInt(value)
 
-export const floatHandler = (context: Form, field: Field, { target }: Event): void => {
+export const floatHandler = (target: Target): string | number => {
   let { value } = target
   // If the value is "-" or the last character of the value is "0", then do nothing, because parsing will remove these characters
   if (/(^-$)|(0$)/.test(value)) {
@@ -33,20 +22,15 @@ export const floatHandler = (context: Form, field: Field, { target }: Event): vo
     value = parseFloat(value)
   }
 
-  context.setState((state: Dictionary<any>) => setIn(state, ['entity', ...(field.path || [field.name])], value))
+  return value
 }
 
-export const checkboxHandler = (context: Form, field: Field, { target }: Event): void => {
-  context.setState((state: Dictionary<any>) =>
-    setIn(state, ['entity', ...(field.path || [field.name])], target.checked)
-  )
-}
+export const checkboxHandler = ({ checked }: Target): boolean | undefined => checked
 
-export const fileHandler = (context: Form, field: Field, { target }: Event): void => {
-  context.setState((state: Dictionary<any>) =>
-    setIn(state, ['entity', ...(field.path || [field.name])], _.first(target.files))
-  )
-}
+export const fileHandler = ({ files }: Target): Dictionary<any> | undefined => _.first(files)
+
+export const rangeHandler = ({ value, name }: Target): string[] | number[] =>
+  value.map((v: string) => integerHandler({ value: v, name }))
 
 const handlers: Dictionary<any> = {
   checkbox: checkboxHandler,
@@ -60,6 +44,7 @@ const handlers: Dictionary<any> = {
   image: fileHandler,
   password: baseHandler,
   hidden: baseHandler,
+  range: rangeHandler,
 }
 
 export default handlers

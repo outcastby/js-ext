@@ -4,7 +4,7 @@ export default interface Event {
   target: Target
 }
 
-interface Target {
+export interface Target {
   name: string | string[]
   value: any
   checked?: boolean

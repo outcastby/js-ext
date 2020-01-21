@@ -26,13 +26,14 @@ const getFieldByName = ([name, ...rest]: string[], fields: Field[]): Field => {
   return field
 }
 
-const changeHandler = (event: Event, fields: Field[], context: Form): void => {
-  const name: string[] = _.isArray(event.target.name) ? event.target.name : event.target.name.split(',')
+const changeHandler = ({ target }: Event, fields: Field[], context: Form): void => {
+  const name: string[] = _.isArray(target.name) ? target.name : target.name.split(',')
   const field = getFieldByName(name, fields)
   const handler = handlers[field.type] || handlers.text
-  handler(context, { ...field, path: field.path || name }, event)
-  context.setState((state: Dictionary<any>) => setIn(state, ['errors', field.name.toString()], null))
-  // context.setState((state: Dictionary<any>) => { errors: { ...context.state.errors, [field.name.toString()]: null } })
+  context.setState((state: Dictionary<any>) => {
+    const newState = setIn(state, ['entity', ...(field.path || name)], handler(target))
+    return setIn(newState, ['errors', field.name.toString()], null)
+  })
 }
 
 export default {
