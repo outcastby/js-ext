@@ -18,6 +18,7 @@ const inputs: Dictionary<any> = {
   image: Proxy,
   password: Proxy,
   hidden: Hidden,
+  range: Proxy,
 }
 
 export default inputs

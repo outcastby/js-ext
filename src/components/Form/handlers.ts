@@ -4,17 +4,15 @@ import { Field, Event } from './interfaces'
 import Dictionary from '../../interfaces/Dictionary'
 import Form from './Form'
 
+const handleInteger = (value: string): string | number => (/(^-$)|(-\D+)/.test(value) ? '-' : parseInt(value))
+
 export const baseHandler = (context: Form, field: Field, { target }: Event): void => {
   context.setState((state: Dictionary<any>) => setIn(state, ['entity', ...(field.path || [field.name])], target.value))
 }
 
 export const integerHandler = (context: Form, field: Field, { target }: Event): void => {
   context.setState((state: Dictionary<any>) =>
-    setIn(
-      state,
-      ['entity', ...(field.path || [field.name])],
-      /(^-$)|(-\D+)/.test(target.value) ? '-' : parseInt(target.value)
-    )
+    setIn(state, ['entity', ...(field.path || [field.name])], handleInteger(target.value))
   )
 }
 
@@ -48,6 +46,16 @@ export const fileHandler = (context: Form, field: Field, { target }: Event): voi
   )
 }
 
+export const rangeHandler = (context: Form, field: Field, { target }: Event): void => {
+  context.setState((state: Dictionary<any>) =>
+    setIn(
+      state,
+      ['entity', ...(field.path || [field.name])],
+      target.value.map((v: string) => handleInteger(v))
+    )
+  )
+}
+
 const handlers: Dictionary<any> = {
   checkbox: checkboxHandler,
   text: baseHandler,
@@ -60,6 +68,7 @@ const handlers: Dictionary<any> = {
   image: fileHandler,
   password: baseHandler,
   hidden: baseHandler,
+  range: rangeHandler,
 }
 
 export default handlers
