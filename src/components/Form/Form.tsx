@@ -39,7 +39,7 @@ class Form extends React.Component<Props, { errors?: Dictionary<any>; settings: 
     NormalizeFields.run(this.props.settings.fields).then((fields) => {
       const settings = { ...this.props.settings, fields }
 
-      const entity = SetEntity.run(settings.fields, this.props.entity)
+      const entity = SetEntity.run(settings.fields, this.props.type, this.props.entity)
 
       this.setState({ settings, entity })
     })

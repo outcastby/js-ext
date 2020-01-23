@@ -3,9 +3,22 @@ import Dictionary from '../../interfaces/Dictionary'
 import { getIn, setIn } from '../../utils/fp'
 import v4 from 'uuid/v4'
 import _ from 'lodash'
+import Form from '../../utils/form'
+
+interface GetValueParams {
+  result: Dictionary<any>
+  field: Field
+  value: any
+  actionType: 'edit' | 'new'
+}
 
 const SetEntity = {
-  run: (fields: Field[], entity: Dictionary<any> = {}, parentPath: string | undefined = undefined): Dictionary<any> => {
+  run: (
+    fields: Field[],
+    actionType: 'edit' | 'new',
+    entity: Dictionary<any> = {},
+    parentPath: string | undefined = undefined
+  ): Dictionary<any> => {
     return fields.reduce((result, field) => {
       const { name } = field
       const fullPath = parentPath ? `${parentPath}.${name}` : name
@@ -14,18 +27,24 @@ const SetEntity = {
 
       value =
         field.fields && !field.type?.includes('[]')
-          ? SetEntity.run(field.fields, entity, fullPath)
-          : getValue(field, value)
+          ? SetEntity.run(field.fields, actionType, entity, fullPath)
+          : getValue({ result, field, value, actionType })
 
-      return setIn(result, name, value)
+      return [null, undefined].includes(value) ? result : setIn(result, name, value)
     }, {} as Dictionary<any>)
   },
 }
 
-const getValue = (field: Field, value: any): any => (value ? normalizeValue(field, value) : getDefaultValue(field))
+const getValue = (params: GetValueParams): any => (params.value ? normalizeValue(params) : getDefaultValue(params))
 
-const getDefaultValue = ({ allowEmpty, multiple, options, type, defaultValue }: Field): any => {
-  if (defaultValue || defaultValue === false) return defaultValue
+const getDefaultValue = ({
+  field: { allowEmpty, multiple, options, type, defaultValue },
+  field,
+  result,
+  actionType,
+}: GetValueParams): any => {
+  if (!Form.isAvailable(field, result, actionType)) return
+  if (![null, undefined].includes(defaultValue)) return defaultValue
   if (type?.includes('[]')) return []
   if (allowEmpty) return
 
@@ -34,8 +53,8 @@ const getDefaultValue = ({ allowEmpty, multiple, options, type, defaultValue }: 
   }
 }
 
-const normalizeValue = ({ fields, type, multiple, async }: Field, value: any): any => {
-  if (type?.includes('[]')) return normalizedJSONList(fields, value)
+const normalizeValue = ({ field: { fields, type, multiple, async }, value, actionType }: GetValueParams): any => {
+  if (type?.includes('[]')) return normalizedJSONList(fields, value, actionType)
 
   if (async) return value
 
@@ -46,9 +65,9 @@ const normalizeValue = ({ fields, type, multiple, async }: Field, value: any): a
   return value
 }
 
-const normalizedJSONList = (fields: Field[] | undefined, values: any[]): any[] => {
+const normalizedJSONList = (fields: Field[] | undefined, values: any[], actionType: 'edit' | 'new'): any[] => {
   if (fields) {
-    return values.map((v: {}) => ({ ...SetEntity.run(fields, v), __uuid: v4() }))
+    return values.map((v: {}) => ({ ...SetEntity.run(fields, actionType, v), __uuid: v4() }))
   } else {
     return values.map((v: {}) => ({ ...v, __uuid: v4() }))
   }

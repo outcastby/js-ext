@@ -2,6 +2,7 @@ import SetEntity from '../../../src/core/form/SetEntity'
 import fields from './fields'
 import uuid from 'uuid/v4'
 import { mocked } from 'ts-jest/utils'
+import Dictionary from '../../../src/interfaces/Dictionary'
 
 jest.mock('uuid/v4')
 
@@ -19,7 +20,7 @@ describe('run', (): void => {
       },
       redundantKey: 'redundantValue',
     }
-    expect(SetEntity.run(fields, entity)).toEqual({
+    expect(SetEntity.run(fields, 'edit', entity)).toMatchObject({
       name: 'Test',
       challengeType: 'weekly',
       rewards: [
@@ -34,9 +35,7 @@ describe('run', (): void => {
   })
 
   test('without entity', (): void => {
-    expect(SetEntity.run(fields, {})).toEqual({
-      name: undefined,
-      challengeType: undefined,
+    expect(SetEntity.run(fields, 'new')).toMatchObject({
       rewards: [],
       data: {
         static: {},
@@ -61,9 +60,9 @@ describe('getDefaultValue', (): void => {
             ],
           },
         ],
-        {}
+        'new'
       )
-    ).toEqual({ type: 'milestone' })
+    ).toMatchObject({ type: 'milestone' })
   })
 
   test('type: `select`, multiple: true', (): void => {
@@ -81,9 +80,9 @@ describe('getDefaultValue', (): void => {
             multiple: true,
           },
         ],
-        {}
+        'new'
       )
-    ).toEqual({ type: [] })
+    ).toMatchObject({ type: [] })
   })
 
   test('type: `select`, allowEmpty: true', (): void => {
@@ -101,8 +100,58 @@ describe('getDefaultValue', (): void => {
             allowEmpty: true,
           },
         ],
-        {}
+        'new'
       )
-    ).toEqual({ type: undefined })
+    ).toMatchObject({})
+  })
+  test('type: `select`, with availableIf is true', (): void => {
+    expect(
+      SetEntity.run(
+        [
+          {
+            name: 'type',
+            label: 'Type',
+            type: 'select',
+            options: [
+              { value: 'milestone', label: 'Milestone' },
+              { value: '', label: 'Empty' },
+            ],
+          },
+          {
+            name: 'value',
+            availableIf: ({ type }: Dictionary<any>): boolean => type === 'milestone',
+            label: 'Value',
+            type: 'text',
+            defaultValue: '',
+          },
+        ],
+        'new'
+      )
+    ).toMatchObject({ type: 'milestone', value: '' })
+  })
+  test('type: `select`, with availableIf is false', (): void => {
+    expect(
+      SetEntity.run(
+        [
+          {
+            name: 'type',
+            label: 'Type',
+            type: 'select',
+            options: [
+              { value: 'milestone', label: 'Milestone' },
+              { value: '', label: 'Empty' },
+            ],
+          },
+          {
+            name: 'value',
+            availableIf: (value: any, actionType: string): boolean => actionType === 'new',
+            label: 'Value',
+            type: 'text',
+            defaultValue: '',
+          },
+        ],
+        'edit'
+      )
+    ).toMatchObject({ type: 'milestone' })
   })
 })

@@ -29,7 +29,7 @@ class InputList extends React.Component<Props, {}> {
     const {
       field: { fields },
     } = this.props
-    const entity = fields ? SetEntity.run(fields) : {}
+    const entity = fields ? SetEntity.run(fields, this.props.actionType) : {}
     this.handleChange([{ __uuid: v4(), ...entity }, ...this.props.values])
   }
 
