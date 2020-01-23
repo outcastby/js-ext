@@ -5,7 +5,7 @@ export default interface Event {
 }
 
 export interface Target {
-  name: string | string[]
+  name: string
   value: any
   checked?: boolean
   files?: Dictionary<any>[]
