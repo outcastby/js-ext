@@ -113,7 +113,7 @@ class Form extends React.Component<Props, { errors?: Dictionary<any>; settings: 
         onChange={this.onChange}
       >
         {this.state.settings.fields.map((field) => {
-          const value = getIn(this.state.entity, field.path || [field.name])
+          const value = getIn(this.state.entity, field.name)
           return (
             <InputRow
               actionType={this.props.type}

@@ -16,17 +16,19 @@ class SmartJSON extends React.Component<InputComponentProps, { activeField: numb
       value,
       actionType,
     } = this.props
-    const fieldName: string[] = _.isArray(name) ? name : [name]
+
     return fields.reduce((result: Field[], f: Field) => {
       if (Form.isAvailable(f, value, actionType)) {
-        return [...result, { ...f, name: _.flatten([...fieldName, f.name]) }]
+        return [...result, { ...f, name: `${name}.${f.name}` }]
       }
       return result
     }, [])
   }
 
   renderRow = (field: Field, extra = {}): any => {
-    const fieldValue = _.isArray(field.name) ? _.get(this.props.value, _.last(field.name) as string) : field.name
+    const nameList = field.name.split('.')
+
+    const fieldValue = nameList.length === 1 ? field.name : _.get(this.props.value, _.last(nameList) as string)
 
     return <InputRow {...this.props} field={field} value={fieldValue} {...extra} />
   }

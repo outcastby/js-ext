@@ -8,8 +8,7 @@ export interface Option {
 
 export default interface Field {
   label?: string
-  name: string | string[]
-  path?: string[]
+  name: string
   type: string
   options?: (Option | string)[] | (() => Promise<any>)
   multiple?: boolean

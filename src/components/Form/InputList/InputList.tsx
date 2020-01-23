@@ -13,7 +13,7 @@ interface Props {
   values: Value[]
   helpText: string
   layout: 'horizontal' | 'vertical'
-  name?: string | string[]
+  name?: string
   onChange: (event: Event) => void
   field: Field
 }
@@ -36,13 +36,10 @@ class InputList extends React.Component<Props, {}> {
   remove = ({ __uuid }: Value): void => this.handleChange(this.props.values.filter((v) => v.__uuid !== __uuid))
 
   handleChange = (value: Value[]): void => {
-    this.props.onChange({ target: { name: this.getFullName().join(','), value } })
+    this.props.onChange({ target: { name: this.getFullName(), value } })
   }
 
-  getFullName = (): string[] => {
-    const fullName = this.props.name ? [...this.props.name, this.props.field.name] : [this.props.field.name]
-    return _.flatten(fullName)
-  }
+  getFullName = (): string => (this.props.name ? `${this.props.name}.${this.props.field.name}` : this.props.field.name)
 
   hasLabel = (): boolean => !!this.props.field.label
 
@@ -53,7 +50,7 @@ class InputList extends React.Component<Props, {}> {
         {...this.props}
         field={{
           ...field,
-          name: [...this.getFullName(), index.toString()],
+          name: `${this.getFullName()}.${index}`,
           label: this.hasLabel() ? undefined : field.label,
         }}
         grid={{ input: 9, right: 0, label: 3 }}

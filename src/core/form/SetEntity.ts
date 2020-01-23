@@ -5,17 +5,19 @@ import v4 from 'uuid/v4'
 import _ from 'lodash'
 
 const SetEntity = {
-  run: (fields: Field[], entity: Dictionary<any> = {}, parentPath: any = []): Dictionary<any> => {
+  run: (fields: Field[], entity: Dictionary<any> = {}, parentPath: string | undefined = undefined): Dictionary<any> => {
     return fields.reduce((result, field) => {
-      const { name, path } = field
-      let value = getIn(entity, [...parentPath, ...(path || [name])])
+      const { name } = field
+      const fullPath = parentPath ? `${parentPath}.${name}` : name
+
+      let value = getIn(entity, fullPath)
 
       value =
         field.fields && !field.type?.includes('[]')
-          ? SetEntity.run(field.fields, entity, [...parentPath, ...(path || [name])])
+          ? SetEntity.run(field.fields, entity, fullPath)
           : getValue(field, value)
 
-      return setIn(result, path || [name], value)
+      return setIn(result, name, value)
     }, {} as Dictionary<any>)
   },
 }

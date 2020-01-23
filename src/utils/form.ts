@@ -10,29 +10,30 @@ const isAvailable = ({ availableIf }: Field, value: Dictionary<any>, actionType:
   return availableIf(value || {}, actionType)
 }
 
-const getFieldByName = ([name, ...rest]: string[], fields: Field[]): Field => {
-  if (_.toNumber(name) || _.toNumber(name) === 0) {
-    return getFieldByName(rest, fields)
+const getFieldByName = (name: string, fields: Field[]): Field => {
+  const [first, ...rest] = name.split('.')
+
+  if (_.toNumber(first) || _.toNumber(first) === 0) {
+    return getFieldByName(rest.join('.'), fields)
   }
-  const field = fields.find((field) => field.name === name)
+  const field = fields.find((field) => field.name === name || field.name === first)
 
   if (!field) {
     throw new Error(`The field is not found for name ${name}. Check settings`)
   }
 
   if (rest.length) {
-    return field.fields ? getFieldByName(rest, field.fields) : field
+    return field.fields ? getFieldByName(rest.join('.'), field.fields) : field
   }
   return field
 }
 
 const changeHandler = ({ target }: Event, fields: Field[], context: Form): void => {
-  const name: string[] = _.isArray(target.name) ? target.name : target.name.split(',')
-  const field = getFieldByName(name, fields)
+  const field = getFieldByName(target.name, fields)
   const handler = handlers[field.type] || handlers.text
   context.setState((state: Dictionary<any>) => {
-    const newState = setIn(state, ['entity', ...(field.path || name)], handler(target))
-    return setIn(newState, ['errors', field.name.toString()], null)
+    const newState = setIn(state, `entity.${target.name}`, handler(target))
+    return setIn(newState, `errors.${field.name}`, null)
   })
 }
 
