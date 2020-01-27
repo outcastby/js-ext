@@ -33,7 +33,7 @@ const changeHandler = ({ target }: Event, fields: Field[], context: Form): void 
   const handler = handlers[field.type] || handlers.text
   context.setState((state: Dictionary<any>) => {
     const newState = setIn(state, `entity.${target.name}`, handler(target))
-    return setIn(newState, `errors.${field.name}`, null)
+    return setIn(newState, `errors.${target.name.split('.')[0]}`, null)
   })
 }
 

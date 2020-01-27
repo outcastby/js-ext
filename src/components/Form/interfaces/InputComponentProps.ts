@@ -1,4 +1,5 @@
 import { Event, Field, Config } from './index'
+import Dictionary from '../../../interfaces/Dictionary'
 
 export default interface InputComponentProps {
   config: Config
@@ -9,7 +10,6 @@ export default interface InputComponentProps {
   onChange: (event: Event) => void
   field: Field
   success: boolean
-  error: boolean
-  helpText: string
+  errors: Dictionary<any>
   actionType: 'edit' | 'new'
 }

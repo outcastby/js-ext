@@ -4,6 +4,7 @@ import { InputComponentProps, Field } from '../interfaces'
 import FakeInput from './FakeInput'
 import Form from '../../../utils/form'
 import InputRow from '../InputRow'
+import fp from '../../../utils/fp'
 
 class SmartJSON extends React.Component<InputComponentProps, { activeField: number }> {
   state = {
@@ -28,9 +29,11 @@ class SmartJSON extends React.Component<InputComponentProps, { activeField: numb
   renderRow = (field: Field, extra = {}): any => {
     const nameList = field.name.split('.')
 
-    const fieldValue = nameList.length === 1 ? field.name : _.get(this.props.value, _.last(nameList) as string)
+    const fieldValue = nameList.length === 1 ? field.name : fp.getIn(this.props.value, _.last(nameList) as string)
 
-    return <InputRow {...this.props} field={field} value={fieldValue} {...extra} />
+    const fieldError = fp.getIn(this.props.errors, _.last(nameList))
+
+    return <InputRow {...this.props} field={field} value={fieldValue} errors={fieldError} {...extra} />
   }
 
   render(): any {
@@ -40,6 +43,7 @@ class SmartJSON extends React.Component<InputComponentProps, { activeField: numb
       field: { type },
     } = this.props
     const Component = config.inputs[type] || FakeInput
+
     return (
       <Component
         {...this.props}
