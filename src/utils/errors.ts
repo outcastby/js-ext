@@ -7,7 +7,7 @@ export const isGraphQLError = (error: any): boolean => error?.stack?.includes('G
 
 export const normalize = (serverErrors: any[], fields: Field[]): any => {
   const details = _.first(serverErrors).details
-  if (details) return _.reduce(details, (res, error, key) => fp.setIn(res, key, error[0]), {})
+  if (details) return _.reduce(details, (res, errors, key) => fp.setIn(res, key, errors), {})
 
   const messages: string[] =
     serverErrors.length > 1 ? serverErrors.map((error) => error.message) : _.first(serverErrors).message.split('\n')
@@ -19,7 +19,7 @@ export const normalize = (serverErrors: any[], fields: Field[]): any => {
     })
     if (error) {
       const lastMessage = _.last(error.split(':')) as string
-      errors[field.name.toString()] = lastMessage.trim()
+      errors[field.name.toString()] = [lastMessage.trim()]
     }
     return errors
   }, {})
