@@ -118,9 +118,8 @@ class Form extends React.Component<Props, { errors?: Dictionary<any>; settings: 
             <InputRow
               actionType={this.props.type}
               config={this.props.config || Config.get(['jsExt', 'form'])}
-              error={!!errors[field.name as string]}
+              errors={errors[field.name]}
               field={field}
-              helpText={errors[field.name as string] ? errors[field.name as string][0] : ''}
               id={this.props.entity.id}
               key={field.name.toString()}
               layout={settings.layout}

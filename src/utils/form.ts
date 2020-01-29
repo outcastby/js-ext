@@ -2,8 +2,9 @@ import _ from 'lodash'
 import { Field, Event } from '../components/Form/interfaces'
 import { Dictionary } from '../index'
 import handlers from '../components/Form/handlers'
-import { setIn } from './fp'
+import fp from './fp'
 import Form from '../components/Form'
+import ClearErrors from '../core/form/ClearErrors'
 
 const isAvailable = ({ availableIf }: Field, value: Dictionary<any>, actionType: 'edit' | 'new'): boolean => {
   if (!availableIf) return true
@@ -32,8 +33,9 @@ const changeHandler = ({ target }: Event, fields: Field[], context: Form): void 
   const field = getFieldByName(target.name, fields)
   const handler = handlers[field.type] || handlers.text
   context.setState((state: Dictionary<any>) => {
-    const newState = setIn(state, `entity.${target.name}`, handler(target))
-    return setIn(newState, `errors.${field.name}`, null)
+    const newState = fp.setIn(state, `entity.${target.name}`, handler(target))
+    const errors = fp.setIn(newState.errors, target.name, null)
+    return fp.setIn(newState, `errors`, ClearErrors.run(errors))
   })
 }
 

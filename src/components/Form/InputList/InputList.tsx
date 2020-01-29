@@ -4,14 +4,14 @@ import { Field, Event, Config } from '../interfaces'
 import _ from 'lodash'
 import InputRow from '../InputRow'
 import SetEntity from '../../../core/form/SetEntity'
+import Dictionary from '../../../interfaces/Dictionary'
 
 interface Props {
   actionType: 'edit' | 'new'
   success: boolean
-  error: boolean
+  errors: Dictionary<any>
   config: Config
   values: Value[]
-  helpText: string
   layout: 'horizontal' | 'vertical'
   name?: string
   onChange: (event: Event) => void
@@ -55,13 +55,14 @@ class InputList extends React.Component<Props, {}> {
         }}
         grid={{ input: 9, right: 0, label: 3 }}
         value={this.props.values[index]}
+        errors={this.props.errors && this.props.errors[index]}
         {...extra}
       />
     )
   }
 
   render(): any {
-    const { layout, values, onChange, field, config } = this.props
+    const { layout, values, onChange, field, config, errors } = this.props
 
     return (
       <config.InputList
@@ -74,6 +75,7 @@ class InputList extends React.Component<Props, {}> {
         onChange={onChange}
         onAdd={this.add}
         onRemove={this.remove}
+        errors={errors}
       />
     )
   }

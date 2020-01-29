@@ -12,8 +12,7 @@ interface Props {
   grid?: Dictionary<any>
   onChange: (event: Event) => void
   success: boolean
-  error: boolean
-  helpText: string
+  errors: Dictionary<any>
   field: Field
   config: Config
   id?: number
