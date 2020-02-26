@@ -9,11 +9,15 @@ export interface Action {
   payload?: object
 }
 
+export interface GQLAction extends Action {
+  request: Request
+}
+
 export interface Reducer {
   (state: object, action: Action): object
 }
 
-interface Request {
+export interface Request {
   query: ASTNode
   variables: object
   multi?: boolean

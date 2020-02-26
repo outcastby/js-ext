@@ -15,5 +15,5 @@ export { default as InputList } from './components/Form/InputList'
 export { default as InputRow } from './components/Form/InputRow'
 
 // interfaces
-export { Action } from './redux/interfaces'
+export { Action, GQLAction } from './redux/interfaces'
 export { default as Dictionary } from './interfaces/Dictionary'
