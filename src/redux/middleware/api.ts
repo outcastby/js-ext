@@ -1,6 +1,6 @@
 import { GraphQLError } from 'graphql'
 import GQLFetch from '../../core/gql/Fetch'
-import { Action } from '../interfaces'
+import { Action, GQLAction } from '../interfaces'
 
 export interface Interceptor {
   condition: (response: object) => boolean
@@ -8,7 +8,7 @@ export interface Interceptor {
 }
 
 export interface TokenCallback {
-  (action: Action, errors: object): void
+  (action: GQLAction, errors: object): Promise<any>
 }
 
 const apiMiddleware = (invalidTokenCallback: TokenCallback, interceptors?: Interceptor[]) => () => (next: any) => (
@@ -28,7 +28,7 @@ const apiMiddleware = (invalidTokenCallback: TokenCallback, interceptors?: Inter
     .catch((errors) => {
       next({ type: FAILURE, errors, requestAction: action })
       if (errors.response?.data === 'invalid_access_token') { // eslint-disable-line
-        invalidTokenCallback(action, errors)
+        return invalidTokenCallback(action as GQLAction, errors)
       }
       return errors
     })
