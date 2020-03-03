@@ -43,9 +43,9 @@ const getDefaultValue = ({
   result,
   actionType,
 }: GetValueParams): any => {
+  if (type?.includes('[]')) return []
   if (!Form.isAvailable(field, result, actionType)) return
   if (![null, undefined].includes(defaultValue)) return defaultValue
-  if (type?.includes('[]')) return []
   if (allowEmpty) return
 
   if (_.isArray(options) && _.isObject(options[0])) {
