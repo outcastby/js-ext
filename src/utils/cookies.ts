@@ -13,8 +13,10 @@ const get = (key: string): string | undefined => Cookies.get(key)
 
 const remove = (key: string): void => Cookies.remove(key)
 
-const getDecrypted = (key: string): string | undefined =>
-  sjcl.decrypt(Config.get(['jsExt', 'cookies', 'secretKey']), get(key) || '')
+const getDecrypted = (key: string): string | undefined => {
+  const value = get(key)
+  return value ? sjcl.decrypt(Config.get(['jsExt', 'cookies', 'secretKey']), value) : value
+}
 
 export default {
   set,
